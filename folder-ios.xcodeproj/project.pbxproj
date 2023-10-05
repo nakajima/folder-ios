@@ -14,6 +14,18 @@
 		A606E4392ACCAB9800D5CC0D /* folder_iosTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A606E4382ACCAB9800D5CC0D /* folder_iosTests.swift */; };
 		A606E4432ACCAB9800D5CC0D /* folder_iosUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A606E4422ACCAB9800D5CC0D /* folder_iosUITests.swift */; };
 		A606E4452ACCAB9800D5CC0D /* folder_iosUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A606E4442ACCAB9800D5CC0D /* folder_iosUITestsLaunchTests.swift */; };
+		A606E4532ACCAE2700D5CC0D /* TimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = A606E4522ACCAE2700D5CC0D /* TimeInterval.swift */; };
+		A606E4562ACCEADB00D5CC0D /* TrackListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A606E4552ACCEADB00D5CC0D /* TrackListView.swift */; };
+		A606E4592ACCEAF500D5CC0D /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = A606E4582ACCEAF500D5CC0D /* Track.swift */; };
+		A606E45B2ACCEB7300D5CC0D /* TrackShowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A606E45A2ACCEB7300D5CC0D /* TrackShowView.swift */; };
+		A6B013102ACE6D6500A868A8 /* NeonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B0130F2ACE6D6500A868A8 /* NeonView.swift */; };
+		A6B013122ACE6D8200A868A8 /* CGPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B013112ACE6D8200A868A8 /* CGPath.swift */; };
+		A6B013142ACE6D9000A868A8 /* Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B013132ACE6D9000A868A8 /* Path.swift */; };
+		A6B013162ACE6DA600A868A8 /* UIBezierPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B013152ACE6DA600A868A8 /* UIBezierPath.swift */; };
+		A6B013182ACE6F5A00A868A8 /* TrackListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B013172ACE6F5A00A868A8 /* TrackListCellView.swift */; };
+		A6B0131B2ACE860700A868A8 /* PlayerProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B0131A2ACE860700A868A8 /* PlayerProvider.swift */; };
+		A6B0131E2ACE97B800A868A8 /* pat.swift in Frameworks */ = {isa = PBXBuildFile; productRef = A6B0131D2ACE97B800A868A8 /* pat.swift */; };
+		A6B013202ACEA01B00A868A8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B0131F2ACEA01B00A868A8 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +57,17 @@
 		A606E43E2ACCAB9800D5CC0D /* folder-iosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "folder-iosUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A606E4422ACCAB9800D5CC0D /* folder_iosUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = folder_iosUITests.swift; sourceTree = "<group>"; };
 		A606E4442ACCAB9800D5CC0D /* folder_iosUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = folder_iosUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		A606E4522ACCAE2700D5CC0D /* TimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeInterval.swift; sourceTree = "<group>"; };
+		A606E4552ACCEADB00D5CC0D /* TrackListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListView.swift; sourceTree = "<group>"; };
+		A606E4582ACCEAF500D5CC0D /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
+		A606E45A2ACCEB7300D5CC0D /* TrackShowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackShowView.swift; sourceTree = "<group>"; };
+		A6B0130F2ACE6D6500A868A8 /* NeonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeonView.swift; sourceTree = "<group>"; };
+		A6B013112ACE6D8200A868A8 /* CGPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPath.swift; sourceTree = "<group>"; };
+		A6B013132ACE6D9000A868A8 /* Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Path.swift; sourceTree = "<group>"; };
+		A6B013152ACE6DA600A868A8 /* UIBezierPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBezierPath.swift; sourceTree = "<group>"; };
+		A6B013172ACE6F5A00A868A8 /* TrackListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListCellView.swift; sourceTree = "<group>"; };
+		A6B0131A2ACE860700A868A8 /* PlayerProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProvider.swift; sourceTree = "<group>"; };
+		A6B0131F2ACEA01B00A868A8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6B0131E2ACE97B800A868A8 /* pat.swift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,11 +119,15 @@
 		A606E4252ACCAB9700D5CC0D /* folder-ios */ = {
 			isa = PBXGroup;
 			children = (
+				A606E4572ACCEAEF00D5CC0D /* Models */,
+				A606E4542ACCEACE00D5CC0D /* Views */,
+				A606E4512ACCAE1D00D5CC0D /* Extensions */,
 				A606E4262ACCAB9700D5CC0D /* folder_iosApp.swift */,
 				A606E4282ACCAB9700D5CC0D /* ContentView.swift */,
 				A606E42A2ACCAB9800D5CC0D /* Assets.xcassets */,
 				A606E42C2ACCAB9800D5CC0D /* folder_ios.entitlements */,
 				A606E42D2ACCAB9800D5CC0D /* Preview Content */,
+				A6B0131F2ACEA01B00A868A8 /* Constants.swift */,
 			);
 			path = "folder-ios";
 			sourceTree = "<group>";
@@ -129,6 +157,53 @@
 			path = "folder-iosUITests";
 			sourceTree = "<group>";
 		};
+		A606E4512ACCAE1D00D5CC0D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A606E4522ACCAE2700D5CC0D /* TimeInterval.swift */,
+				A6B013112ACE6D8200A868A8 /* CGPath.swift */,
+				A6B013132ACE6D9000A868A8 /* Path.swift */,
+				A6B013152ACE6DA600A868A8 /* UIBezierPath.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A606E4542ACCEACE00D5CC0D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A6B013192ACE85FF00A868A8 /* Providers */,
+				A6B0130E2ACE6D5E00A868A8 /* Covers */,
+				A606E4552ACCEADB00D5CC0D /* TrackListView.swift */,
+				A606E45A2ACCEB7300D5CC0D /* TrackShowView.swift */,
+				A6B013172ACE6F5A00A868A8 /* TrackListCellView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A606E4572ACCEAEF00D5CC0D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A606E4582ACCEAF500D5CC0D /* Track.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A6B0130E2ACE6D5E00A868A8 /* Covers */ = {
+			isa = PBXGroup;
+			children = (
+				A6B0130F2ACE6D6500A868A8 /* NeonView.swift */,
+			);
+			path = Covers;
+			sourceTree = "<group>";
+		};
+		A6B013192ACE85FF00A868A8 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				A6B0131A2ACE860700A868A8 /* PlayerProvider.swift */,
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -145,6 +220,9 @@
 			dependencies = (
 			);
 			name = "folder-ios";
+			packageProductDependencies = (
+				A6B0131D2ACE97B800A868A8 /* pat.swift */,
+			);
 			productName = "folder-ios";
 			productReference = A606E4232ACCAB9700D5CC0D /* folder-ios.app */;
 			productType = "com.apple.product-type.application";
@@ -217,6 +295,9 @@
 				Base,
 			);
 			mainGroup = A606E41A2ACCAB9700D5CC0D;
+			packageReferences = (
+				A6B0131C2ACE97B800A868A8 /* XCRemoteSwiftPackageReference "pat" */,
+			);
 			productRefGroup = A606E4242ACCAB9700D5CC0D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -260,7 +341,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				A606E4292ACCAB9700D5CC0D /* ContentView.swift in Sources */,
+				A6B013182ACE6F5A00A868A8 /* TrackListCellView.swift in Sources */,
+				A606E4592ACCEAF500D5CC0D /* Track.swift in Sources */,
+				A606E4532ACCAE2700D5CC0D /* TimeInterval.swift in Sources */,
+				A6B013162ACE6DA600A868A8 /* UIBezierPath.swift in Sources */,
+				A606E4562ACCEADB00D5CC0D /* TrackListView.swift in Sources */,
 				A606E4272ACCAB9700D5CC0D /* folder_iosApp.swift in Sources */,
+				A6B013202ACEA01B00A868A8 /* Constants.swift in Sources */,
+				A606E45B2ACCEB7300D5CC0D /* TrackShowView.swift in Sources */,
+				A6B013122ACE6D8200A868A8 /* CGPath.swift in Sources */,
+				A6B013142ACE6D9000A868A8 /* Path.swift in Sources */,
+				A6B013102ACE6D6500A868A8 /* NeonView.swift in Sources */,
+				A6B0131B2ACE860700A868A8 /* PlayerProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -617,6 +709,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A6B0131C2ACE97B800A868A8 /* XCRemoteSwiftPackageReference "pat" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nakajima/pat.swift";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A6B0131D2ACE97B800A868A8 /* pat.swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A6B0131C2ACE97B800A868A8 /* XCRemoteSwiftPackageReference "pat" */;
+			productName = pat.swift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A606E41B2ACCAB9700D5CC0D /* Project object */;
 }

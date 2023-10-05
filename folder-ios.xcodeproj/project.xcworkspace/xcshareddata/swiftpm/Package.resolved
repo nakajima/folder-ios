@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "pat.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nakajima/pat.swift",
+      "state" : {
+        "branch" : "main",
+        "revision" : "8152cf7ff50d3094d0d590efe193c366437293a8"
+      }
+    }
+  ],
+  "version" : 2
+}
