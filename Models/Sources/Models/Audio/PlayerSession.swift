@@ -203,14 +203,9 @@ public class PlayerSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
 			return .success
 		}
 
-		commandCenter.previousTrackCommand.addTarget { _ -> MPRemoteCommandHandlerStatus in
-			Task(priority: .userInitiated) { [weak self] in
-				guard let playlist = self?.playlist else { return }
+		commandCenter.previousTrackCommand.addTarget { [weak self] _ -> MPRemoteCommandHandlerStatus in
+			self?.previous()
 
-				if let (track, version) = await playlist.previous(current: self?.nowPlaying) {
-					await self?.play(track: track, version: version)
-				}
-			}
 			return .success
 		}
 	}
