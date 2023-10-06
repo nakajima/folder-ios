@@ -121,8 +121,10 @@ struct TrackShowView: View {
 										.cornerRadius(Constants.cornerRadius)
 										.bold()
 								}, sheetContent: {
-									FolderView(folder: folder)
-										.environmentObject(playerSession)
+									PlayerProvider(session: playerSession) {
+										FolderView(folder: folder)
+											.environmentObject(playerSession)
+									}
 								})
 								.tint(.primary)
 								.buttonStyle(.borderless)
