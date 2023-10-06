@@ -18,6 +18,9 @@
 		A606E4562ACCEADB00D5CC0D /* TrackListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A606E4552ACCEADB00D5CC0D /* TrackListView.swift */; };
 		A606E4592ACCEAF500D5CC0D /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = A606E4582ACCEAF500D5CC0D /* Track.swift */; };
 		A606E45B2ACCEB7300D5CC0D /* TrackShowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A606E45A2ACCEB7300D5CC0D /* TrackShowView.swift */; };
+		A60AC1652ACF3C5D00D2A68A /* Models in Frameworks */ = {isa = PBXBuildFile; productRef = A60AC1642ACF3C5D00D2A68A /* Models */; };
+		A653EF3B2ACF1E6C00E3B05E /* TagStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A653EF3A2ACF1E6C00E3B05E /* TagStackView.swift */; };
+		A6836FC52ACF3D5D00910049 /* API in Frameworks */ = {isa = PBXBuildFile; productRef = A6836FC42ACF3D5D00910049 /* API */; };
 		A6B013102ACE6D6500A868A8 /* NeonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B0130F2ACE6D6500A868A8 /* NeonView.swift */; };
 		A6B013122ACE6D8200A868A8 /* CGPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B013112ACE6D8200A868A8 /* CGPath.swift */; };
 		A6B013142ACE6D9000A868A8 /* Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B013132ACE6D9000A868A8 /* Path.swift */; };
@@ -26,6 +29,8 @@
 		A6B0131B2ACE860700A868A8 /* PlayerProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B0131A2ACE860700A868A8 /* PlayerProvider.swift */; };
 		A6B0131E2ACE97B800A868A8 /* pat.swift in Frameworks */ = {isa = PBXBuildFile; productRef = A6B0131D2ACE97B800A868A8 /* pat.swift */; };
 		A6B013202ACEA01B00A868A8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B0131F2ACEA01B00A868A8 /* Constants.swift */; };
+		A6DC2F472ACFA9D400CA85EB /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6DC2F462ACFA9D400CA85EB /* PlayerView.swift */; };
+		A6DC2F492ACFAACA00CA85EB /* PlayStateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6DC2F482ACFAACA00CA85EB /* PlayStateProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +66,8 @@
 		A606E4552ACCEADB00D5CC0D /* TrackListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListView.swift; sourceTree = "<group>"; };
 		A606E4582ACCEAF500D5CC0D /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		A606E45A2ACCEB7300D5CC0D /* TrackShowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackShowView.swift; sourceTree = "<group>"; };
+		A653EF352ACF192F00E3B05E /* Models */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Models; sourceTree = "<group>"; };
+		A653EF3A2ACF1E6C00E3B05E /* TagStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagStackView.swift; sourceTree = "<group>"; };
 		A6B0130F2ACE6D6500A868A8 /* NeonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeonView.swift; sourceTree = "<group>"; };
 		A6B013112ACE6D8200A868A8 /* CGPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPath.swift; sourceTree = "<group>"; };
 		A6B013132ACE6D9000A868A8 /* Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Path.swift; sourceTree = "<group>"; };
@@ -68,6 +75,9 @@
 		A6B013172ACE6F5A00A868A8 /* TrackListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListCellView.swift; sourceTree = "<group>"; };
 		A6B0131A2ACE860700A868A8 /* PlayerProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerProvider.swift; sourceTree = "<group>"; };
 		A6B0131F2ACEA01B00A868A8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		A6B013352ACEA8A400A868A8 /* API */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = API; sourceTree = "<group>"; };
+		A6DC2F462ACFA9D400CA85EB /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		A6DC2F482ACFAACA00CA85EB /* PlayStateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayStateProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +85,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6836FC52ACF3D5D00910049 /* API in Frameworks */,
+				A60AC1652ACF3C5D00D2A68A /* Models in Frameworks */,
 				A6B0131E2ACE97B800A868A8 /* pat.swift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -99,10 +111,13 @@
 		A606E41A2ACCAB9700D5CC0D = {
 			isa = PBXGroup;
 			children = (
+				A653EF352ACF192F00E3B05E /* Models */,
+				A6B013352ACEA8A400A868A8 /* API */,
 				A606E4252ACCAB9700D5CC0D /* folder-ios */,
 				A606E4372ACCAB9800D5CC0D /* folder-iosTests */,
 				A606E4412ACCAB9800D5CC0D /* folder-iosUITests */,
 				A606E4242ACCAB9700D5CC0D /* Products */,
+				A653EF362ACF1D7400E3B05E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -119,7 +134,7 @@
 		A606E4252ACCAB9700D5CC0D /* folder-ios */ = {
 			isa = PBXGroup;
 			children = (
-				A606E4572ACCEAEF00D5CC0D /* Models */,
+				A606E4572ACCEAEF00D5CC0D /* PreviewData */,
 				A606E4542ACCEACE00D5CC0D /* Views */,
 				A606E4512ACCAE1D00D5CC0D /* Extensions */,
 				A606E4262ACCAB9700D5CC0D /* folder_iosApp.swift */,
@@ -171,21 +186,38 @@
 		A606E4542ACCEACE00D5CC0D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A653EF392ACF1E6000E3B05E /* Components */,
 				A6B013192ACE85FF00A868A8 /* Providers */,
 				A6B0130E2ACE6D5E00A868A8 /* Covers */,
 				A606E4552ACCEADB00D5CC0D /* TrackListView.swift */,
 				A606E45A2ACCEB7300D5CC0D /* TrackShowView.swift */,
 				A6B013172ACE6F5A00A868A8 /* TrackListCellView.swift */,
+				A6DC2F462ACFA9D400CA85EB /* PlayerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
-		A606E4572ACCEAEF00D5CC0D /* Models */ = {
+		A606E4572ACCEAEF00D5CC0D /* PreviewData */ = {
 			isa = PBXGroup;
 			children = (
 				A606E4582ACCEAF500D5CC0D /* Track.swift */,
 			);
-			path = Models;
+			path = PreviewData;
+			sourceTree = "<group>";
+		};
+		A653EF362ACF1D7400E3B05E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A653EF392ACF1E6000E3B05E /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A653EF3A2ACF1E6C00E3B05E /* TagStackView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		A6B0130E2ACE6D5E00A868A8 /* Covers */ = {
@@ -199,6 +231,7 @@
 		A6B013192ACE85FF00A868A8 /* Providers */ = {
 			isa = PBXGroup;
 			children = (
+				A6DC2F482ACFAACA00CA85EB /* PlayStateProvider.swift */,
 				A6B0131A2ACE860700A868A8 /* PlayerProvider.swift */,
 			);
 			path = Providers;
@@ -222,6 +255,8 @@
 			name = "folder-ios";
 			packageProductDependencies = (
 				A6B0131D2ACE97B800A868A8 /* pat.swift */,
+				A60AC1642ACF3C5D00D2A68A /* Models */,
+				A6836FC42ACF3D5D00910049 /* API */,
 			);
 			productName = "folder-ios";
 			productReference = A606E4232ACCAB9700D5CC0D /* folder-ios.app */;
@@ -343,14 +378,17 @@
 				A606E4292ACCAB9700D5CC0D /* ContentView.swift in Sources */,
 				A6B013182ACE6F5A00A868A8 /* TrackListCellView.swift in Sources */,
 				A606E4592ACCEAF500D5CC0D /* Track.swift in Sources */,
+				A6DC2F472ACFA9D400CA85EB /* PlayerView.swift in Sources */,
 				A606E4532ACCAE2700D5CC0D /* TimeInterval.swift in Sources */,
 				A6B013162ACE6DA600A868A8 /* UIBezierPath.swift in Sources */,
 				A606E4562ACCEADB00D5CC0D /* TrackListView.swift in Sources */,
 				A606E4272ACCAB9700D5CC0D /* folder_iosApp.swift in Sources */,
 				A6B013202ACEA01B00A868A8 /* Constants.swift in Sources */,
+				A653EF3B2ACF1E6C00E3B05E /* TagStackView.swift in Sources */,
 				A606E45B2ACCEB7300D5CC0D /* TrackShowView.swift in Sources */,
 				A6B013122ACE6D8200A868A8 /* CGPath.swift in Sources */,
 				A6B013142ACE6D9000A868A8 /* Path.swift in Sources */,
+				A6DC2F492ACFAACA00CA85EB /* PlayStateProvider.swift in Sources */,
 				A6B013102ACE6D6500A868A8 /* NeonView.swift in Sources */,
 				A6B0131B2ACE860700A868A8 /* PlayerProvider.swift in Sources */,
 			);
@@ -722,6 +760,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A60AC1642ACF3C5D00D2A68A /* Models */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Models;
+		};
+		A6836FC42ACF3D5D00910049 /* API */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = API;
+		};
 		A6B0131D2ACE97B800A868A8 /* pat.swift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A6B0131C2ACE97B800A868A8 /* XCRemoteSwiftPackageReference "pat" */;

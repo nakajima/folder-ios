@@ -1,0 +1,625 @@
+type AccessToken {
+  token: String!
+}
+
+scalar DateTime
+
+type Folder implements Node & Notable {
+  createdAt: DateTime!
+  dbid: ID!
+  id: ID!
+  name: String!
+  notes: [Note!]
+  orderedTrackIDs: [ID!]!
+  slug: String!
+  tracks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): TrackConnection!
+  updatedAt: DateTime!
+}
+
+"""
+The connection type for Folder.
+"""
+type FolderConnection {
+  """
+  A list of edges.
+  """
+  edges: [FolderEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [Folder]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type FolderEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Folder
+}
+
+"""
+Image sizes, sorta random omg
+"""
+enum ImageSize {
+  FULL
+  LARGE
+  MEDIUM
+  SMALL
+}
+
+type Mutation {
+  addComment(body: String!, position: Int!, versionId: ID!): TrackComment
+  addFolder(name: String!, trackIDs: [String!]): Folder
+  addNote(body: String!, notableID: ID!): Notable
+  addTrackToFolder(folderID: ID!, trackID: ID!): Track
+  archiveTrack(trackID: ID!): Track
+  createProject(name: String!, uuid: String!): Project
+  createProjectUploadFromSignedID(note: String, projectUUID: String!, signedID: String!): ProjectUpload
+  createTrackFromSignedID(name: String!, signedID: String!): Track
+  createTrackVersionCommentByDBID(body: String!, position: Int!, versionId: Int!): TrackComment
+  createTrackVersionFromSignedID(signedID: String!, trackID: String!): Track
+
+  """
+  Login and get an access token
+  """
+  loginAs(email: String!, password: String!): AccessToken
+  removeTrackFromFolder(folderID: ID!, trackID: ID!): Track
+  requestProjectUpload(byteSize: Int!, checksum: String!, contentType: String!, filename: String!): UploadRequest
+  requestUpload(byteSize: Int!, checksum: String!, contentType: String!, filename: String!): UploadRequest
+  setFolderTrackOrder(folderID: ID!, trackIDs: [ID!]!): Folder
+  setTrackBPM(bpm: Int!, trackID: ID!): Track
+  setTrackForProject(projectUUID: String!, trackID: String!): Project
+  setTrackKey(key: String!, trackID: ID!): Track
+  unarchiveTrack(trackID: ID!): Track
+}
+
+"""
+An object with an ID.
+"""
+interface Node {
+  """
+  ID of the object.
+  """
+  id: ID!
+}
+
+interface Notable {
+  notes: [Note!]
+}
+
+type Note implements Node {
+  author: User!
+  body: String
+  createdAt: DateTime!
+  dbid: ID!
+  id: ID!
+  updatedAt: DateTime!
+}
+
+"""
+Information about pagination in a connection.
+"""
+type PageInfo {
+  """
+  When paginating forwards, the cursor to continue.
+  """
+  endCursor: String
+
+  """
+  When paginating forwards, are there more items?
+  """
+  hasNextPage: Boolean!
+
+  """
+  When paginating backwards, are there more items?
+  """
+  hasPreviousPage: Boolean!
+
+  """
+  When paginating backwards, the cursor to continue.
+  """
+  startCursor: String
+}
+
+type Project implements Node {
+  createdAt: DateTime!
+  creator: User!
+  currentVersion: ProjectUpload
+  dbid: ID!
+  id: ID!
+  name: String!
+  track: Track
+  updatedAt: DateTime!
+  uploads: [ProjectUpload!]!
+  uuid: String!
+}
+
+"""
+The connection type for Project.
+"""
+type ProjectConnection {
+  """
+  A list of edges.
+  """
+  edges: [ProjectEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [Project]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type ProjectEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Project
+}
+
+type ProjectUpload implements Node {
+  createdAt: DateTime!
+  dbid: ID!
+  id: ID!
+  note: String
+  project: Project!
+  updatedAt: DateTime!
+  url: String!
+  version: Int!
+}
+
+type Query {
+  node(id: ID!): Node
+  track(id: ID!): Track
+
+  """
+  The viewer
+  """
+  viewer: Viewer
+}
+
+type ShareLink implements Node {
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
+  url: String!
+}
+
+type Track implements Node & Notable {
+  bpm: Int
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): TrackCommentConnection!
+  coverArtUrl(size: ImageSize): String
+  createdAt: DateTime!
+  creator: User!
+  currentVersion: TrackVersion!
+  dbid: ID!
+  folders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): FolderConnection!
+  id: ID!
+  isArchived: Boolean!
+  key: String
+  name: String!
+  notes: [Note!]
+  shareLinks: [ShareLink!]!
+  shareUrl: String!
+  updatedAt: DateTime!
+  url: String!
+  versions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): TrackVersionConnection!
+}
+
+type TrackComment implements Node {
+  body: String!
+  createdAt: DateTime!
+  dbid: ID!
+  hidden_by: User
+  id: ID!
+  position: Int!
+  time: Int!
+  updatedAt: DateTime!
+  user: User!
+  version: TrackVersion!
+}
+
+"""
+The connection type for TrackComment.
+"""
+type TrackCommentConnection {
+  """
+  A list of edges.
+  """
+  edges: [TrackCommentEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [TrackComment]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type TrackCommentEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: TrackComment
+}
+
+"""
+The connection type for Track.
+"""
+type TrackConnection {
+  """
+  A list of edges.
+  """
+  edges: [TrackEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [Track]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type TrackEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Track
+}
+
+type TrackVersion implements Node & Notable {
+  checksum: String!
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): TrackCommentConnection!
+  createdAt: DateTime!
+  dbid: ID!
+  duration: Int
+  id: ID!
+  infoURL: String!
+  isCurrent: Boolean!
+  isProcessing: Boolean!
+  notes: [Note!]
+  number: Int!
+  peaks: [Int!]
+  playURL: String!
+  updatedAt: DateTime!
+  uuid: String!
+}
+
+"""
+The connection type for TrackVersion.
+"""
+type TrackVersionConnection {
+  """
+  A list of edges.
+  """
+  edges: [TrackVersionEdge]
+
+  """
+  A list of nodes.
+  """
+  nodes: [TrackVersion]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+"""
+An edge in a connection.
+"""
+type TrackVersionEdge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: TrackVersion
+}
+
+type UploadRequest {
+  signedID: String!
+  url: String!
+}
+
+type UploadSuggestion {
+  possibleTrack: Track
+  potentialName: String
+}
+
+type User implements Node {
+  dbid: ID!
+  email: String!
+  id: ID!
+  name: String!
+  username: String!
+}
+
+type Viewer {
+  """
+  The archived tracks for a user
+  """
+  archivedTracks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): TrackConnection!
+
+  """
+  The tracks for a user
+  """
+  feedTracks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+    since: DateTime
+  ): TrackConnection
+
+  """
+  The folders for a user
+  """
+  folders(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): FolderConnection!
+  projects(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+  ): ProjectConnection!
+
+  """
+  Get a track version
+  """
+  trackVersion(dbid: String!): TrackVersion
+
+  """
+  Get a fresh track version download URL
+  """
+  trackVersionDownloadURL(dbid: String!): String
+  tracks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: String
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+    query: String
+  ): TrackConnection!
+  uploadSuggestions(filenames: [String!]!): [UploadSuggestion!]
+
+  """
+  The current user
+  """
+  user: User
+}

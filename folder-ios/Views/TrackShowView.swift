@@ -7,52 +7,16 @@
 
 import SwiftUI
 import pat_swift
-
-struct ChipsStack: Layout {
-		private let spacing: CGFloat
-
-		init(spacing: CGFloat = 8) {
-				self.spacing = spacing
-		}
-
-	func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-			let sizes = subviews.map { $0.sizeThatFits(proposal) }
-			let maxViewHeight = sizes.map { $0.height }.max() ?? 0
-			var currentRowWidth: CGFloat = 0
-			var totalHeight: CGFloat = maxViewHeight
-			var totalWidth: CGFloat = 0
-
-			for size in sizes {
-					if currentRowWidth + spacing + size.width > proposal.width ?? 0 {
-							totalHeight += spacing + maxViewHeight
-							currentRowWidth = size.width
-					} else {
-							currentRowWidth += spacing + size.width
-					}
-					totalWidth = max(totalWidth, currentRowWidth)
-			}
-			return CGSize(width: totalWidth, height: totalHeight)
-	}
-
-	func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-			let sizes = subviews.map { $0.sizeThatFits(proposal) }
-			let maxViewHeight = sizes.map { $0.height }.max() ?? 0
-			var point = CGPoint(x: bounds.minX, y: bounds.minY)
-			for index in subviews.indices {
-					if point.x + sizes[index].width > bounds.maxX {
-							point.x = bounds.minX
-							point.y += maxViewHeight + spacing
-					}
-					subviews[index].place(at: point, proposal: ProposedViewSize(sizes[index]))
-					point.x += sizes[index].width + spacing
-			}
-	}
-}
+import Models
 
 struct TrackShowView: View {
 	@Namespace var namespace
+	@Environment(\.blackbirdDatabase) var database
 
 	@State private var isShowingCover = false
+
+	@State var versions = TrackVersion.LiveResults()
+	var versionsUpdater = TrackVersion.ArrayUpdater()
 
 	var track: Track
 
@@ -93,41 +57,33 @@ struct TrackShowView: View {
 					}
 
 					VStack(spacing: 12) {
-						HStack(spacing: 8) {
-							Image(systemName: "play.fill")
-								.shadow(radius: 2)
-							Text("Version 1")
-								.bold()
-							Text("Current")
-								.font(.caption2)
-								.padding(.horizontal, 4)
-								.padding(.vertical, 2)
-								.background(.ultraThinMaterial)
-								.cornerRadius(Constants.cornerRadius)
-							Spacer()
-							Text("0 comments")
-								.foregroundStyle(.secondary)
+						ForEach(versions.results) { version in
+							HStack(spacing: 8) {
+								PlayButton(track: track, version: version)
+									.shadow(radius: 2)
+								Text("Version \(version.number)")
+									.bold()
+
+								if version.isCurrent {
+									Text("Current")
+										.font(.caption2)
+										.padding(.horizontal, 4)
+										.padding(.vertical, 2)
+										.background(.ultraThinMaterial)
+										.cornerRadius(Constants.cornerRadius)
+								}
+
+								Spacer()
+
+								Text("0 comments")
+									.foregroundStyle(.secondary)
+							}
+							.foregroundStyle(version.status == .downloaded ? .primary : .secondary)
+
+							if version.number != 1 {
+								Divider()
+							}
 						}
-
-						Divider()
-
-						HStack(spacing: 8) {
-							Image(systemName: "play.fill")
-							Text("Version 2")
-							Spacer()
-							Text("0 comments")
-						}
-						.foregroundStyle(.secondary)
-
-						Divider()
-
-						HStack(spacing: 8) {
-							Image(systemName: "play.fill")
-							Text("Version 3")
-							Spacer()
-							Text("0 comments")
-						}
-						.foregroundStyle(.secondary)
 					}
 					.font(.subheadline)
 					.frame(maxWidth: .infinity)
@@ -135,8 +91,13 @@ struct TrackShowView: View {
 					.background(.ultraThinMaterial)
 					.cornerRadius(Constants.cornerRadius)
 					.listRowSeparator(.hidden)
+					.onAppear {
+						versionsUpdater.bind(from: database, to: $versions) {
+							try await TrackVersion.read(from: $0, sqlWhere: "trackID = ? ORDER BY number DESC", track.id)
+						}
+					}
 
-					ChipsStack {
+					TagStackView {
 						Text("Folders:")
 							.font(.caption)
 							.padding(.vertical, 4)
@@ -145,15 +106,15 @@ struct TrackShowView: View {
 							.padding(.horizontal, 8)
 							.padding(.vertical, 4)
 							.font(.caption)
-							.cornerRadius(Constants.cornerRadius)
 							.background(.ultraThinMaterial)
+							.cornerRadius(Constants.cornerRadius)
 							.bold()
 						Text("Acoustic")
 							.padding(.horizontal, 8)
 							.padding(.vertical, 4)
 							.font(.caption)
-							.cornerRadius(Constants.cornerRadius)
 							.background(.ultraThinMaterial)
+							.cornerRadius(Constants.cornerRadius)
 							.bold()
 					}
 					.cornerRadius(Constants.cornerRadius)
@@ -186,8 +147,11 @@ struct TrackShowView: View {
 }
 
 #Preview {
-	NavigationStack {
-		TrackShowView(track: Track.list[1])
-			.navigationBarTitleDisplayMode(.inline)
+	DBProvider(.memory) {
+		ClientProvider {
+			NavigationStack {
+				TrackListView()
+			}
+		}
 	}
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Models
 
 struct TrackListCellView: View {
 	var track: Track
@@ -17,9 +18,7 @@ struct TrackListCellView: View {
 					.cornerRadius(Constants.cornerRadius)
 
 				Button(action: {}) {
-					Label("Play", systemImage: "play.circle")
-						.labelStyle(.iconOnly)
-						.foregroundStyle(Color.white)
+					PlayButton(track: track)
 				}
 				.shadow(radius: 2)
 			}
@@ -33,11 +32,26 @@ struct TrackListCellView: View {
 				}
 
 				HStack(spacing: 4) {
-					Text(track.duration.formatDuration)
-						.font(.caption)
+//					Text(track.duration.formatDuration)
+//						.font(.caption)
+					TrackVersionProvider(track: track) { version in
+						Group {
+							switch version.status {
+							case .unknown:
+								Text("Unsynced")
+								Image(systemName: "exclamationmark.arrow.triangle.2.circlepath")
+							case .downloading:
+								Text("Syncing…")
+								Image(systemName: "arrow.down.app")
+							case .downloaded:
+								Text("Synced")
+								Image(systemName: "checkmark.circle")
+							}
+						}
+					}
+
 					Spacer()
-					Text("Synced")
-					Image(systemName: "checkmark.circle")
+
 				}
 				.foregroundStyle(.secondary)
 				.font(.caption)

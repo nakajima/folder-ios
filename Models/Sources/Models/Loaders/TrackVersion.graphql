@@ -1,0 +1,8 @@
+fragment TrackVersionFragment on TrackVersion {
+	id: dbid
+	node_id: id
+	duration
+	number
+	uuid
+	isCurrent
+}

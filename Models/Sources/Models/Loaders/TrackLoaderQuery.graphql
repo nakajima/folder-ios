@@ -1,0 +1,22 @@
+query TrackLoaderQuery {
+	viewer {
+		feedTracks {
+			edges {
+				node {
+					nodeID: id
+					id: dbid
+					name
+					updatedAt
+					shareUrl
+					versions {
+						edges {
+							node {
+								...TrackVersionFragment
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

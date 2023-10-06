@@ -1,0 +1,5 @@
+query GetTrackVersionDownloadURL($dbid: String!) {
+  viewer {
+    trackVersionDownloadURL(dbid: $dbid)
+  }
+}

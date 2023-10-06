@@ -6,12 +6,17 @@
 //
 
 import SwiftUI
+import Models
 
 struct ContentView: View {
 	var body: some View {
-		PlayerProvider {
-			NavigationStack {
-				TrackListView()
+		DBProvider(.name("Hi.db")) {
+			ClientProvider {
+				PlayerProvider {
+					NavigationStack {
+						TrackListView()
+					}
+				}
 			}
 		}
 	}
