@@ -4,6 +4,6 @@
 import ApolloAPI
 
 public extension Interfaces {
-  /// An object with an ID.
-  static let Node = Interface(name: "Node")
+    /// An object with an ID.
+    static let Node = Interface(name: "Node")
 }

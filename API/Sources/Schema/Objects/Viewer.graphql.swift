@@ -4,8 +4,8 @@
 import ApolloAPI
 
 public extension Objects {
-  static let Viewer = Object(
-    typename: "Viewer",
-    implementedInterfaces: []
-  )
+    static let Viewer = Object(
+        typename: "Viewer",
+        implementedInterfaces: []
+    )
 }

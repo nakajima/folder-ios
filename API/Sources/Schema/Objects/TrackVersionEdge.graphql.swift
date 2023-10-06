@@ -4,9 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-  /// An edge in a connection.
-  static let TrackVersionEdge = Object(
-    typename: "TrackVersionEdge",
-    implementedInterfaces: []
-  )
+    /// An edge in a connection.
+    static let TrackVersionEdge = Object(
+        typename: "TrackVersionEdge",
+        implementedInterfaces: []
+    )
 }
