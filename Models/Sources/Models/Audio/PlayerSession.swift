@@ -190,7 +190,9 @@ public class PlayerSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
 		}
 
 		commandCenter.pauseCommand.addTarget { [weak self] _ -> MPRemoteCommandHandlerStatus in
-			self?.previous()
+			Task(priority: .userInitiated) { [weak self] in
+				await self?.pause()
+			}
 
 			return .success
 		}
