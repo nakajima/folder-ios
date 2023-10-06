@@ -9,19 +9,19 @@ import Models
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        DBProvider(.name("Hi.db")) {
-            ClientProvider {
-                PlayerProvider {
-                    NavigationStack {
-                        TrackListView()
-                    }
-                }
-            }
-        }
-    }
+	var body: some View {
+		DBProvider(.name("Hi.db")) {
+			ClientProvider {
+				PlayerProvider {
+					NavigationStack {
+						TrackListView()
+					}
+				}
+			}
+		}
+	}
 }
 
 #Preview {
-    ContentView()
+	ContentView()
 }

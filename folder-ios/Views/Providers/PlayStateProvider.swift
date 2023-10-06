@@ -9,12 +9,12 @@ import Models
 import SwiftUI
 
 struct PlayStateProvider<Content: View>: View {
-    @EnvironmentObject var playerSession: PlayerSession
+	@EnvironmentObject var playerSession: PlayerSession
 
-    var version: TrackVersion
-    var content: (Bool) -> Content
+	var version: TrackVersion
+	var content: (Bool) -> Content
 
-    var body: some View {
-        content(false)
-    }
+	var body: some View {
+		content(false)
+	}
 }

@@ -4,5 +4,5 @@
 import ApolloAPI
 
 public extension Interfaces {
-    static let Notable = Interface(name: "Notable")
+	static let Notable = Interface(name: "Notable")
 }

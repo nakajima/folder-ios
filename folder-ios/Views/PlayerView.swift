@@ -8,158 +8,158 @@
 import SwiftUI
 
 struct PlayerView: View {
-    @GestureState var dragOffset: CGFloat = 0
-    @State private var isExpanded = false
-    @State private var isScrubbing = false
-    @State private var text = ""
+	@GestureState var dragOffset: CGFloat = 0
+	@State private var isExpanded = false
+	@State private var isScrubbing = false
+	@State private var text = ""
 
-    //	var nowPlaying: NowPlaying
-    @EnvironmentObject var playerSession: PlayerSession
+	//	var nowPlaying: NowPlaying
+	@EnvironmentObject var playerSession: PlayerSession
 
-    var body: some View {
-        if let nowPlaying = playerSession.nowPlaying {
-            VStack(alignment: .leading, spacing: 0) {
-                HStack {
-                    Text(nowPlaying.track.name)
-                        .bold()
-                    Spacer()
+	var body: some View {
+		if let nowPlaying = playerSession.nowPlaying {
+			VStack(alignment: .leading, spacing: 0) {
+				HStack {
+					Text(nowPlaying.track.name)
+						.bold()
+					Spacer()
 
-                    Button(action: {
-                        withAnimation(.spring(duration: 0.2)) {
-                            isExpanded.toggle()
-                        }
-                    }) {
-                        Image(systemName: "ellipsis.circle")
-                    }
-                    .tint(.primary)
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                    .clipShape(Circle())
+					Button(action: {
+						withAnimation(.spring(duration: 0.2)) {
+							isExpanded.toggle()
+						}
+					}) {
+						Image(systemName: "ellipsis.circle")
+					}
+					.tint(.primary)
+					.buttonStyle(.bordered)
+					.controlSize(.small)
+					.clipShape(Circle())
 
-                    PlayButton(track: nowPlaying.track, version: nowPlaying.version)
-                }
+					PlayButton(track: nowPlaying.track, version: nowPlaying.version)
+				}
 
-                if isExpanded {
-                    HStack {
-                        TextField("Add a comment…", text: $text)
-                            .textFieldStyle(.roundedBorder)
-                        Button(action: {}) {
-                            Text("Post")
-                        }
-                        .buttonStyle(.bordered)
-                        .controlSize(.small)
-                        .tint(.primary)
-                    }
-                    .padding(.vertical)
-                    .transition(.scale(0, anchor: .bottom).combined(with: .opacity))
-                }
+				if isExpanded {
+					HStack {
+						TextField("Add a comment…", text: $text)
+							.textFieldStyle(.roundedBorder)
+						Button(action: {}) {
+							Text("Post")
+						}
+						.buttonStyle(.bordered)
+						.controlSize(.small)
+						.tint(.primary)
+					}
+					.padding(.vertical)
+					.transition(.scale(0, anchor: .bottom).combined(with: .opacity))
+				}
 
-                Text("Version \(nowPlaying.version.number)")
-                    .foregroundStyle(.secondary)
+				Text("Version \(nowPlaying.version.number)")
+					.foregroundStyle(.secondary)
 
-                HStack {
-                    Text(nowPlaying.currentTime.formatDuration)
-                        .monospacedDigit()
-                    GeometryReader { geo in
-                        ZStack(alignment: .leading) {
-                            RoundedRectangle(cornerRadius: Constants.cornerRadius * 12)
-                                .frame(height: isScrubbing ? 12 : 2)
-                                .cornerRadius(12)
+				HStack {
+					Text(nowPlaying.currentTime.formatDuration)
+						.monospacedDigit()
+					GeometryReader { geo in
+						ZStack(alignment: .leading) {
+							RoundedRectangle(cornerRadius: Constants.cornerRadius * 12)
+								.frame(height: isScrubbing ? 12 : 2)
+								.cornerRadius(12)
 
-                            if let duration = nowPlaying.version.duration {
-                                RoundedRectangle(cornerRadius: Constants.cornerRadius * 12)
-                                    .fill(.primary)
-                                    .frame(width: (nowPlaying.currentTime / TimeInterval(duration)) * geo.size.width)
-                                    .animation(.linear(duration: 1), value: nowPlaying.currentTime)
-                                    .frame(height: isScrubbing ? 12 : 2)
-                            }
-                        }
-                        .highPriorityGesture(DragGesture(minimumDistance: 0).onChanged { event in
-                            withAnimation {
-                                isScrubbing = true
-                            }
-                            print("\(event)")
-                        }.onEnded { _ in
-                            withAnimation {
-                                isScrubbing = false
-                            }
-                        })
-                    }
-                    .frame(height: isScrubbing ? 12 : 2)
-                    .cornerRadius(64)
+							if let duration = nowPlaying.version.duration {
+								RoundedRectangle(cornerRadius: Constants.cornerRadius * 12)
+									.fill(.primary)
+									.frame(width: (nowPlaying.currentTime / TimeInterval(duration)) * geo.size.width)
+									.animation(.linear(duration: 1), value: nowPlaying.currentTime)
+									.frame(height: isScrubbing ? 12 : 2)
+							}
+						}
+						.highPriorityGesture(DragGesture(minimumDistance: 0).onChanged { event in
+							withAnimation {
+								isScrubbing = true
+							}
+							print("\(event)")
+						}.onEnded { _ in
+							withAnimation {
+								isScrubbing = false
+							}
+						})
+					}
+					.frame(height: isScrubbing ? 12 : 2)
+					.cornerRadius(64)
 
-                    Text("\(TimeInterval(nowPlaying.version.duration ?? 0).formatDuration)")
-                }
-                .foregroundColor(.secondary)
-                .font(.caption2)
-                .padding(.vertical, 8)
+					Text("\(TimeInterval(nowPlaying.version.duration ?? 0).formatDuration)")
+				}
+				.foregroundColor(.secondary)
+				.font(.caption2)
+				.padding(.vertical, 8)
 
-                if isExpanded {
-                    VStack(spacing: 12) {
-                        HStack(spacing: 24) {
-                            Spacer()
+				if isExpanded {
+					VStack(spacing: 12) {
+						HStack(spacing: 24) {
+							Spacer()
 
-                            Image(systemName: "backward")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24, height: 24)
+							Image(systemName: "backward")
+								.resizable()
+								.scaledToFit()
+								.frame(width: 24, height: 24)
 
-                            PlayButton(
-                                track: nowPlaying.track,
-                                version: nowPlaying.version,
-                                playIcon: "play.circle.fill",
-                                pauseIcon: "pause.circle.fill",
-                                size: 32
-                            )
+							PlayButton(
+								track: nowPlaying.track,
+								version: nowPlaying.version,
+								playIcon: "play.circle.fill",
+								pauseIcon: "pause.circle.fill",
+								size: 32
+							)
 
-                            Image(systemName: "forward")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24, height: 24)
+							Image(systemName: "forward")
+								.resizable()
+								.scaledToFit()
+								.frame(width: 24, height: 24)
 
-                            Spacer()
-                        }
-                    }
-                    .transition(.scale(0, anchor: .bottom).combined(with: .opacity))
-                    .padding(.top, 12)
-                    .fontWeight(.light)
-                }
-            }
-            .id("\(nowPlaying.track.id)-\(nowPlaying.version.id)")
-            .font(.subheadline)
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal)
-            .padding(.vertical, 12)
-            .padding(.bottom, dragPadding)
-            .background(.ultraThinMaterial)
-            .gesture(DragGesture().updating($dragOffset) { event, state, _ in
-                withAnimation {
-                    state = -event.translation.height
-                }
-            })
-            .animation(.spring(duration: 0.2), value: dragOffset)
-            .onChange(of: dragOffset) {
-                withAnimation(.spring(duration: 0.2)) {
-                    if dragOffset != 0 {
-                        self.isExpanded = dragOffset > 48
-                    }
-                }
-            }
-            .transition(.move(edge: .bottom).combined(with: .opacity))
-        } else {
-            Text("No now playing")
-        }
-    }
+							Spacer()
+						}
+					}
+					.transition(.scale(0, anchor: .bottom).combined(with: .opacity))
+					.padding(.top, 12)
+					.fontWeight(.light)
+				}
+			}
+			.id("\(nowPlaying.track.id)-\(nowPlaying.version.id)")
+			.font(.subheadline)
+			.frame(maxWidth: .infinity)
+			.padding(.horizontal)
+			.padding(.vertical, 12)
+			.padding(.bottom, dragPadding)
+			.background(.ultraThinMaterial)
+			.gesture(DragGesture().updating($dragOffset) { event, state, _ in
+				withAnimation {
+					state = -event.translation.height
+				}
+			})
+			.animation(.spring(duration: 0.2), value: dragOffset)
+			.onChange(of: dragOffset) {
+				withAnimation(.spring(duration: 0.2)) {
+					if dragOffset != 0 {
+						self.isExpanded = dragOffset > 48
+					}
+				}
+			}
+			.transition(.move(edge: .bottom).combined(with: .opacity))
+		} else {
+			Text("No now playing")
+		}
+	}
 
-    var dragPadding: CGFloat {
-        if isExpanded {
-            0
-        } else {
-            dragOffset
-        }
-    }
+	var dragPadding: CGFloat {
+		if isExpanded {
+			0
+		} else {
+			dragOffset
+		}
+	}
 }
 
 #Preview {
-    ContentView()
+	ContentView()
 }

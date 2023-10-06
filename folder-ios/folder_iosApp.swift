@@ -9,9 +9,9 @@ import SwiftUI
 
 @main
 struct folder_iosApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
-    }
+	var body: some Scene {
+		WindowGroup {
+			ContentView()
+		}
+	}
 }

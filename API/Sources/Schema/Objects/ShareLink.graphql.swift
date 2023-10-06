@@ -4,8 +4,8 @@
 import ApolloAPI
 
 public extension Objects {
-    static let ShareLink = Object(
-        typename: "ShareLink",
-        implementedInterfaces: [Interfaces.Node.self]
-    )
+	static let ShareLink = Object(
+		typename: "ShareLink",
+		implementedInterfaces: [Interfaces.Node.self]
+	)
 }

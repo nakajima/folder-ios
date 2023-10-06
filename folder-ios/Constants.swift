@@ -8,5 +8,5 @@
 import Foundation
 
 enum Constants {
-    static let cornerRadius: CGFloat = 8
+	static let cornerRadius: CGFloat = 8
 }
