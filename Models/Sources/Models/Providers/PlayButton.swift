@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import pat_swift
 
 public struct PlayButton: View {
 	@EnvironmentObject var playerSession: PlayerSession
@@ -32,6 +33,13 @@ public struct PlayButton: View {
 			if version.status == .downloaded {
 				Button(action: {
 					playerSession.toggle(track: track, version: version)
+
+					Task.detached(priority: .utility) {
+						var track = await track
+						await Log.catch("Error analyzing") {
+							try await track.analyze(database: database!)
+						}
+					}
 				}) {
 					Image(systemName: isPlaying ? pauseIcon : playIcon)
 						.resizable()

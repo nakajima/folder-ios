@@ -12,6 +12,7 @@ public struct Track: BlackbirdModel, Equatable {
 	@BlackbirdColumn public var updatedAt: Date
 	@BlackbirdColumn public var shareURL: URL
 	@BlackbirdColumn public var currentVersionID: Int?
+	@BlackbirdColumn public var analyzedAt = Date.distantPast
 
 	public init(id: Int, nodeID: String, name: String, updatedAt: Date, shareURL: URL) {
 		self.id = id
@@ -34,6 +35,23 @@ public struct Track: BlackbirdModel, Equatable {
 			let version = try await TrackVersion.read(from: db, sqlWhere: "trackID = ? AND isCurrent = ?", id, true).first
 			return version
 		}
+	}
+
+	public mutating func analyze(database: Database) async throws {
+		if analyzedAt > updatedAt {
+			return
+		}
+
+		guard let version = await latestVersion(from: database),
+					version.status == .downloaded else {
+			return
+		}
+
+		try await Analyzer(database: database, track: self, version: version).start()
+
+		analyzedAt = Date()
+
+		try await write(to: database)
 	}
 }
 

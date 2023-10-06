@@ -120,8 +120,21 @@ struct TrackShowView: View {
 					.cornerRadius(Constants.cornerRadius)
 					.listRowSeparator(.hidden)
 					.padding(.top, 12)
+
+					TrackTagsProvider(track: track) { tags in
+						TagStackView {
+							ForEach(tags) { tag in
+								Text(tag.name)
+									.padding(.horizontal, 8)
+									.padding(.vertical, 4)
+									.background(.ultraThinMaterial)
+									.cornerRadius(Constants.cornerRadius)
+									.font(.caption)
+							}
+						}
+						.listRowSeparator(.hidden)
+					}
 				}
-				.listRowSpacing(-12)
 				.listStyle(.plain)
 
 				if isShowingCover {
