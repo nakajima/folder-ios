@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import Models
 
 struct PlayerView: View {
 	@GestureState var dragOffset: CGFloat = 0
 	@State private var isExpanded = false
-	@State private var isScrubbing = false
 	@State private var text = ""
+
+	@State private var isScrubbing = false
+	@State private var scrubbingOffset: CGFloat?
 
 	//	var nowPlaying: NowPlaying
 	@EnvironmentObject var playerSession: PlayerSession
@@ -37,6 +40,7 @@ struct PlayerView: View {
 					.clipShape(Circle())
 
 					PlayButton(track: nowPlaying.track, version: nowPlaying.version)
+						.foregroundStyle(.primary)
 				}
 
 				if isExpanded {
@@ -69,19 +73,23 @@ struct PlayerView: View {
 							if let duration = nowPlaying.version.duration {
 								RoundedRectangle(cornerRadius: Constants.cornerRadius * 12)
 									.fill(.primary)
-									.frame(width: (nowPlaying.currentTime / TimeInterval(duration)) * geo.size.width)
-									.animation(.linear(duration: 1), value: nowPlaying.currentTime)
+									.frame(width: scrubbingOffset ?? (nowPlaying.currentTime / TimeInterval(duration)) * geo.size.width)
+									.animation(.snappy(duration: 0.1), value: nowPlaying.currentTime)
 									.frame(height: isScrubbing ? 12 : 2)
 							}
 						}
 						.highPriorityGesture(DragGesture(minimumDistance: 0).onChanged { event in
 							withAnimation {
 								isScrubbing = true
+
+								self.scrubbingOffset = max(0, event.location.x)
 							}
-							print("\(event)")
-						}.onEnded { _ in
+						}.onEnded { event in
 							withAnimation {
 								isScrubbing = false
+
+								self.playerSession.scrub(to: event.location.x / geo.size.width)
+								self.scrubbingOffset = nil
 							}
 						})
 					}
@@ -99,23 +107,34 @@ struct PlayerView: View {
 						HStack(spacing: 24) {
 							Spacer()
 
-							Image(systemName: "backward")
-								.resizable()
-								.scaledToFit()
-								.frame(width: 24, height: 24)
+							Button(action: {
+								playerSession.previous()
+							}) {
+								Image(systemName: "backward.fill")
+									.resizable()
+									.scaledToFit()
+									.frame(width: 24, height: 24)
+							}
+							.tint(.primary)
 
 							PlayButton(
 								track: nowPlaying.track,
 								version: nowPlaying.version,
 								playIcon: "play.circle.fill",
 								pauseIcon: "pause.circle.fill",
-								size: 32
+								size: 48
 							)
+							.foregroundStyle(.primary)
 
-							Image(systemName: "forward")
-								.resizable()
-								.scaledToFit()
-								.frame(width: 24, height: 24)
+							Button(action: {
+								playerSession.next()
+							}) {
+								Image(systemName: "forward.fill")
+									.resizable()
+									.scaledToFit()
+									.frame(width: 24, height: 24)
+							}
+							.tint(.primary)
 
 							Spacer()
 						}
@@ -146,8 +165,6 @@ struct PlayerView: View {
 				}
 			}
 			.transition(.move(edge: .bottom).combined(with: .opacity))
-		} else {
-			Text("No now playing")
 		}
 	}
 

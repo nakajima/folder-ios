@@ -17,10 +17,8 @@ struct TrackListCellView: View {
 				NeonView(size: 36, seed: track.id)
 					.cornerRadius(Constants.cornerRadius)
 
-				Button(action: {}) {
-					PlayButton(track: track)
-				}
-				.shadow(radius: 2)
+				PlayButton(track: track)
+					.foregroundStyle(.white)
 			}
 
 			VStack(alignment: .leading) {

@@ -78,6 +78,7 @@
 		A6B013352ACEA8A400A868A8 /* API */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = API; sourceTree = "<group>"; };
 		A6DC2F462ACFA9D400CA85EB /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		A6DC2F482ACFAACA00CA85EB /* PlayStateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayStateProvider.swift; sourceTree = "<group>"; };
+		A6DC2F4A2ACFEDB100CA85EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +135,7 @@
 		A606E4252ACCAB9700D5CC0D /* folder-ios */ = {
 			isa = PBXGroup;
 			children = (
+				A6DC2F4A2ACFEDB100CA85EB /* Info.plist */,
 				A606E4572ACCEAEF00D5CC0D /* PreviewData */,
 				A606E4542ACCEACE00D5CC0D /* Views */,
 				A606E4512ACCAE1D00D5CC0D /* Extensions */,
@@ -554,6 +556,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "folder-ios/Info.plist";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -592,6 +595,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "folder-ios/Info.plist";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

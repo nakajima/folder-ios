@@ -60,7 +60,7 @@ struct TrackShowView: View {
 						ForEach(versions.results) { version in
 							HStack(spacing: 8) {
 								PlayButton(track: track, version: version)
-									.shadow(radius: 2)
+
 								Text("Version \(version.number)")
 									.bold()
 

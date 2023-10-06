@@ -10,7 +10,7 @@ import Blackbird
 import Foundation
 import pat_swift
 
-public class VersionDownloader: NSObject, URLSessionDataDelegate {
+public class VersionDownloader: NSObject, ObservableObject, URLSessionDataDelegate {
 	public enum State: Int64, BlackbirdColumnWrappable, BlackbirdStorableAsInteger, Codable {
 		public static func fromValue(_ value: Blackbird.Value) -> State? {
 			switch value {
@@ -73,7 +73,7 @@ public class VersionDownloader: NSObject, URLSessionDataDelegate {
 		}
 
 		await Log.catch("Error downloading") {
-			self.trackVersion.status = .downloaded
+			self.trackVersion.status = .downloading
 			try await self.trackVersion.write(to: self.database)
 
 			guard let remoteURLString = try await self.client.fetch(GetTrackVersionDownloadURLQuery(dbid: "\(self.trackVersion.id)")).viewer?.trackVersionDownloadURL,
