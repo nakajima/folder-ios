@@ -5,8 +5,8 @@
 //  Created by Pat Nakajima on 10/5/23.
 //
 
-import SwiftUI
 import Models
+import SwiftUI
 
 struct PlayerView: View {
 	@GestureState var dragOffset: CGFloat = 0

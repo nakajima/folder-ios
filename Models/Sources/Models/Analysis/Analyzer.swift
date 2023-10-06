@@ -5,8 +5,8 @@
 //  Created by Pat Nakajima on 10/6/23.
 //
 
-import Foundation
 import CoreML
+import Foundation
 import SoundAnalysis
 
 class Analyzer: NSObject, SNResultsObserving {
@@ -21,11 +21,11 @@ class Analyzer: NSObject, SNResultsObserving {
 	}
 
 	/// Notifies the observer when a request generates a prediction.
-	func request(_ request: SNRequest, didProduce result: SNResult) {
+	func request(_: SNRequest, didProduce result: SNResult) {
 		// Downcast the result to a classification result.
-		guard let result = result as? SNClassificationResult else  { return }
+		guard let result = result as? SNClassificationResult else { return }
 
-		for classification in result.classifications.sorted(by: { $0.confidence > $1.confidence })[0..<min(10, result.classifications.count-1)] {
+		for classification in result.classifications.sorted(by: { $0.confidence > $1.confidence })[0 ..< min(10, result.classifications.count - 1)] {
 			if classification.confidence > 0.6, let tagName = Tag.list[classification.identifier] {
 				Task(priority: .utility) {
 					let tag = Tag(name: tagName, trackID: track.id)
@@ -34,15 +34,15 @@ class Analyzer: NSObject, SNResultsObserving {
 			}
 		}
 	}
+
 	/// Notifies the observer when a request generates an error.
-	func request(_ request: SNRequest, didFailWithError error: Error) {
-			print("The analysis failed: \(error.localizedDescription)")
+	func request(_: SNRequest, didFailWithError error: Error) {
+		print("The analysis failed: \(error.localizedDescription)")
 	}
 
-
 	/// Notifies the observer when a request is complete.
-	func requestDidComplete(_ request: SNRequest) {
-			print("The request completed successfully!")
+	func requestDidComplete(_: SNRequest) {
+		print("The request completed successfully!")
 	}
 
 	func start() async throws {

@@ -1,14 +1,14 @@
 //
 //  PlayerSession.swift
-//  
+//
 //
 //  Created by Pat Nakajima on 10/6/23.
 //
 
-import Foundation
 import AVFAudio
-import pat_swift
+import Foundation
 import MediaPlayer
+import pat_swift
 import SwiftUI
 
 public class PlayerSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
@@ -56,7 +56,7 @@ public class PlayerSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
 		}
 	}
 
-	public func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+	public func audioPlayerDidFinishPlaying(_: AVAudioPlayer, successfully _: Bool) {
 		next()
 	}
 
@@ -148,7 +148,7 @@ public class PlayerSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
 
 		let nowPlaying = newNowPlaying
 
-		self.refreshNowPlaying()
+		refreshNowPlaying()
 
 		await MainActor.run {
 			self.nowPlaying = nowPlaying

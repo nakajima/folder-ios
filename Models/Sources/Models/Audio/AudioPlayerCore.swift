@@ -6,8 +6,8 @@
 //
 
 import AVFAudio
-import UIKit
 import pat_swift
+import UIKit
 
 actor AudioPlayerCore {
 	var audioPlayer: AVAudioPlayer?

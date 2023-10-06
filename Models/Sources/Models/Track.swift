@@ -43,7 +43,8 @@ public struct Track: BlackbirdModel, Equatable {
 		}
 
 		guard let version = await latestVersion(from: database),
-					version.status == .downloaded else {
+		      version.status == .downloaded
+		else {
 			return
 		}
 

@@ -5,8 +5,8 @@
 //  Created by Pat Nakajima on 10/6/23.
 //
 
-import SwiftUI
 import pat_swift
+import SwiftUI
 
 public struct PlayButton: View {
 	@EnvironmentObject var playerSession: PlayerSession
@@ -55,7 +55,7 @@ public struct PlayButton: View {
 					Button(action: {
 						Task(priority: .userInitiated) {
 							let downloader = VersionDownloader(client: apiClient, database: database!, trackVersion: version)
-							
+
 							await MainActor.run {
 								self.version?.status = .downloading
 							}
@@ -82,10 +82,10 @@ public struct PlayButton: View {
 			ProgressView()
 				.task {
 					guard let database,
-								let version = try? await TrackVersion.read(
-									from: database,
-									id: track.currentVersionID
-								) else { return }
+					      let version = try? await TrackVersion.read(
+					      	from: database,
+					      	id: track.currentVersionID
+					      ) else { return }
 
 					await MainActor.run {
 						self.version = version

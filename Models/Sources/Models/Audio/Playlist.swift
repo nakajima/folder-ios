@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  Playlist.swift
+//
 //
 //  Created by Pat Nakajima on 10/6/23.
 //
@@ -29,7 +29,7 @@ public struct AllTracksPlaylist: Playlist {
 			return list.first
 		}
 
-		return list.indices.contains(index+1) ? list[index+1] : list.first
+		return list.indices.contains(index + 1) ? list[index + 1] : list.first
 	}
 
 	public func previous(current: NowPlaying?) async -> (Models.Track, Models.TrackVersion)? {
@@ -39,7 +39,7 @@ public struct AllTracksPlaylist: Playlist {
 			return list.first
 		}
 
-		return list.indices.contains(index-1) ? list[index-1] : list.last
+		return list.indices.contains(index - 1) ? list[index - 1] : list.last
 	}
 
 	public func list() async -> [(Models.Track, Models.TrackVersion)] {
@@ -47,7 +47,7 @@ public struct AllTracksPlaylist: Playlist {
 			let tracks = try await Track.read(from: database, orderBy: .descending(\.$updatedAt))
 
 			return try await database.transaction { core in
-				return try tracks.compactMap { track in
+				try tracks.compactMap { track in
 					guard let version = try TrackVersion.readIsolated(from: database, core: core, id: track.currentVersionID) else {
 						return nil
 					}
