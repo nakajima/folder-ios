@@ -12,6 +12,7 @@ import SwiftUI
 struct TrackShowView: View {
 	@Namespace var namespace
 	@Environment(\.blackbirdDatabase) var database
+	@EnvironmentObject var playerSession: PlayerSession
 
 	@State private var isShowingCover = false
 
@@ -97,29 +98,40 @@ struct TrackShowView: View {
 						}
 					}
 
-					TagStackView {
-						Text("Folders:")
-							.font(.caption)
-							.padding(.vertical, 4)
+					TrackFoldersProvider(track: track) { folders in
+						TagStackView(spacing: 4) {
+							Text("Folders:")
+								.font(.caption)
+								.padding(.vertical, 4)
 
-						Text("Pop punk")
-							.padding(.horizontal, 8)
-							.padding(.vertical, 4)
-							.font(.caption)
-							.background(.ultraThinMaterial)
-							.cornerRadius(Constants.cornerRadius)
-							.bold()
-						Text("Acoustic")
-							.padding(.horizontal, 8)
-							.padding(.vertical, 4)
-							.font(.caption)
-							.background(.ultraThinMaterial)
-							.cornerRadius(Constants.cornerRadius)
-							.bold()
+							if folders.isEmpty {
+								Text("None")
+									.padding(.vertical, 4)
+									.font(.caption)
+									.foregroundStyle(.secondary)
+							}
+
+							ForEach(folders) { folder in
+								SheetButton(buttonLabel: {
+									Text(folder.name)
+										.padding(.horizontal, 8)
+										.padding(.vertical, 4)
+										.font(.caption)
+										.background(.ultraThinMaterial)
+										.cornerRadius(Constants.cornerRadius)
+										.bold()
+								}, sheetContent: {
+									FolderView(folder: folder)
+										.environmentObject(playerSession)
+								})
+								.tint(.primary)
+								.buttonStyle(.borderless)
+							}
+						}
+						.cornerRadius(Constants.cornerRadius)
+						.listRowSeparator(.hidden)
+						.padding(.top, 12)
 					}
-					.cornerRadius(Constants.cornerRadius)
-					.listRowSeparator(.hidden)
-					.padding(.top, 12)
 
 					TrackTagsProvider(track: track) { tags in
 						TagStackView {
@@ -133,6 +145,12 @@ struct TrackShowView: View {
 							}
 						}
 						.listRowSeparator(.hidden)
+					}
+
+					if playerSession.nowPlaying != nil {
+						Spacer()
+							.frame(height: 128)
+							.listRowSeparator(.hidden)
 					}
 				}
 				.listStyle(.plain)

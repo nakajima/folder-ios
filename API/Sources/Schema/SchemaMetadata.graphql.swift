@@ -35,6 +35,7 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
 		case "ShareLink": return API.Objects.ShareLink
 		case "TrackComment": return API.Objects.TrackComment
 		case "User": return API.Objects.User
+		case "FolderConnection": return API.Objects.FolderConnection
 		case "TrackVersionConnection": return API.Objects.TrackVersionConnection
 		case "TrackVersionEdge": return API.Objects.TrackVersionEdge
 		default: return nil

@@ -8,6 +8,13 @@ query TrackLoaderQuery {
 					name
 					updatedAt
 					shareUrl
+					folders {
+            nodes {
+              id: dbid
+              nodeID: id
+            	name
+            }
+          }
 					versions {
 						edges {
 							node {

@@ -7,7 +7,7 @@ public class TrackLoaderQuery: GraphQLQuery {
 	public static let operationName: String = "TrackLoaderQuery"
 	public static let operationDocument: ApolloAPI.OperationDocument = .init(
 		definition: .init(
-			#"query TrackLoaderQuery { viewer { __typename feedTracks { __typename edges { __typename node { __typename nodeID: id id: dbid name updatedAt shareUrl versions { __typename edges { __typename node { __typename ...TrackVersionFragment } } } } } } } }"#,
+			#"query TrackLoaderQuery { viewer { __typename feedTracks { __typename edges { __typename node { __typename nodeID: id id: dbid name updatedAt shareUrl folders { __typename nodes { __typename id: dbid nodeID: id name } } versions { __typename edges { __typename node { __typename ...TrackVersionFragment } } } } } } } }"#,
 			fragments: [TrackVersionFragment.self]
 		))
 
@@ -88,6 +88,7 @@ public class TrackLoaderQuery: GraphQLQuery {
 							.field("name", String.self),
 							.field("updatedAt", API.DateTime.self),
 							.field("shareUrl", String.self),
+							.field("folders", Folders.self),
 							.field("versions", Versions.self),
 						] }
 
@@ -96,7 +97,45 @@ public class TrackLoaderQuery: GraphQLQuery {
 						public var name: String { __data["name"] }
 						public var updatedAt: API.DateTime { __data["updatedAt"] }
 						public var shareUrl: String { __data["shareUrl"] }
+						public var folders: Folders { __data["folders"] }
 						public var versions: Versions { __data["versions"] }
+
+						/// Viewer.FeedTracks.Edge.Node.Folders
+						///
+						/// Parent Type: `FolderConnection`
+						public struct Folders: API.SelectionSet {
+							public let __data: DataDict
+							public init(_dataDict: DataDict) { self.__data = _dataDict }
+
+							public static var __parentType: ApolloAPI.ParentType { API.Objects.FolderConnection }
+							public static var __selections: [ApolloAPI.Selection] { [
+								.field("__typename", String.self),
+								.field("nodes", [Node?]?.self),
+							] }
+
+							/// A list of nodes.
+							public var nodes: [Node?]? { __data["nodes"] }
+
+							/// Viewer.FeedTracks.Edge.Node.Folders.Node
+							///
+							/// Parent Type: `Folder`
+							public struct Node: API.SelectionSet {
+								public let __data: DataDict
+								public init(_dataDict: DataDict) { self.__data = _dataDict }
+
+								public static var __parentType: ApolloAPI.ParentType { API.Objects.Folder }
+								public static var __selections: [ApolloAPI.Selection] { [
+									.field("__typename", String.self),
+									.field("dbid", alias: "id", API.ID.self),
+									.field("id", alias: "nodeID", API.ID.self),
+									.field("name", String.self),
+								] }
+
+								public var id: API.ID { __data["id"] }
+								public var nodeID: API.ID { __data["nodeID"] }
+								public var name: String { __data["name"] }
+							}
+						}
 
 						/// Viewer.FeedTracks.Edge.Node.Versions
 						///

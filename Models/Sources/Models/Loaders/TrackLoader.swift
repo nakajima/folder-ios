@@ -78,6 +78,19 @@ public actor TrackLoader {
 						try await track.write(to: database)
 					}
 				}
+
+				await Folder.clear(track: track, in: database)
+
+				for folderNode in (node.folders.nodes ?? []) {
+					guard let folderNode, let id = Int(folderNode.id) else {
+						continue
+					}
+
+					let folder = Folder(id: id, nodeID: folderNode.nodeID, name: folderNode.name)
+					try await folder.write(to: database)
+
+					await Folder.assign(track: track, to: folder, in: database)
+				}
 			}
 		}
 	}
