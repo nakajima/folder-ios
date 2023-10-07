@@ -81,7 +81,7 @@ public actor TrackLoader {
 
 				await Folder.clear(track: track, in: database)
 
-				for folderNode in (node.folders.nodes ?? []) {
+				for folderNode in node.folders.nodes ?? [] {
 					guard let folderNode, let id = Int(folderNode.id) else {
 						continue
 					}
@@ -92,7 +92,7 @@ public actor TrackLoader {
 						name: folderNode.name,
 						orderedTrackIDs: folderNode.orderedTrackIDs.joined(separator: "\t")
 					)
-					
+
 					try await folder.write(to: database)
 
 					await Folder.assign(track: track, to: folder, in: database)

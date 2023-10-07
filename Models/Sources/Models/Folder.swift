@@ -5,8 +5,8 @@
 //  Created by Pat Nakajima on 10/6/23.
 //
 
-import Foundation
 import Blackbird
+import Foundation
 import pat_swift
 
 public struct Folder: BlackbirdModel {
@@ -46,7 +46,7 @@ public struct Folder: BlackbirdModel {
 	}
 }
 
-fileprivate struct FolderTrack: BlackbirdModel {
+private struct FolderTrack: BlackbirdModel {
 	@BlackbirdColumn var id = UUID().uuidString
 	@BlackbirdColumn var trackID: Int
 	@BlackbirdColumn var folderID: Int

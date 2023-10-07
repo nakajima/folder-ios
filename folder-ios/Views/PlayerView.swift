@@ -16,8 +16,8 @@ struct PlayerView: View {
 	@State private var isScrubbing = false
 	@State private var scrubbingOffset: CGFloat?
 
-	//	var nowPlaying: NowPlaying
 	@ObservedObject var playerSession: PlayerSession
+	@EnvironmentObject var pathManager: PathManager
 
 	var body: some View {
 		if let nowPlaying = playerSession.nowPlaying {
@@ -25,6 +25,9 @@ struct PlayerView: View {
 				HStack {
 					Text(nowPlaying.track.name)
 						.bold()
+						.onTapGesture {
+							self.pathManager.append(.track(nowPlaying.track))
+						}
 					Spacer()
 
 					Button(action: {
@@ -161,15 +164,12 @@ struct PlayerView: View {
 				withAnimation {
 					state = -event.translation.height
 				}
+			}.onEnded { event in
+				withAnimation(.spring(duration: 0.2)) {
+					self.isExpanded = event.predictedEndTranslation.height < -100
+				}
 			})
 			.animation(.spring(duration: 0.2), value: dragOffset)
-			.onChange(of: dragOffset) {
-				withAnimation(.spring(duration: 0.2)) {
-					if dragOffset != 0 {
-						self.isExpanded = dragOffset > 48
-					}
-				}
-			}
 			.transition(.move(edge: .bottom).combined(with: .opacity))
 		}
 	}

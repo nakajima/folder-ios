@@ -40,7 +40,7 @@ public struct TrackVersionProvider<Content: View>: View {
 		if let database {
 			view(database: database)
 		} else {
-			Text("No database")
+			EmptyView()
 		}
 	}
 
@@ -50,8 +50,6 @@ public struct TrackVersionProvider<Content: View>: View {
 		return Group {
 			if let version {
 				TrackVersionWrapper(content: content, version: version.liveModel)
-			} else {
-				Text("No version.")
 			}
 		}
 	}

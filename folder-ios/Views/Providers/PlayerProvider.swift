@@ -11,6 +11,7 @@ import pat_swift
 import SwiftUI
 
 struct PlayerProvider<Content: View>: View {
+	@State private var pathManager: PathManager = .init()
 	@StateObject var session = PlayerSession()
 	@Environment(\.blackbirdDatabase) var database
 
@@ -19,15 +20,13 @@ struct PlayerProvider<Content: View>: View {
 	var body: some View {
 		content()
 			.scrollDismissesKeyboard(.interactively)
-			.safeAreaInset(edge: .bottom) {
-				PlayerView(playerSession: session)
-					.environmentObject(session)
-					.transition(.move(edge: .bottom))
-			}
 			.environmentObject(session)
 			.onAppear {
 				session.playlist = AllTracksPlaylist(database: database!)
 			}
+			.onPreferenceChange(PathManagerPreferenceKey.self, perform: { value in
+				self.pathManager = value
+			})
 	}
 }
 

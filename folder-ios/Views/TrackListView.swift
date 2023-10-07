@@ -10,37 +10,44 @@ import SwiftUI
 
 struct TrackListView: View {
 	@EnvironmentObject var playerSession: PlayerSession
+	@EnvironmentObject var pathManager: PathManager
 	@Environment(\.blackbirdDatabase) var database
 
 	var body: some View {
 		TracksProvider { loader, tracks in
 			List {
 				ForEach(tracks) { track in
-					NavigationLink(
-						destination: TrackShowView(track: track)
-							.task(priority: .userInitiated) {
-								if playerSession.nowPlaying != nil {
-									return
-								}
-
-								let currentVersion = try! await TrackVersion.read(from: database!, id: track.currentVersionID)!
-
-								await playerSession.play(version: currentVersion, from: database!)
+					TrackVersionProvider(track: track) { version in
+						Button(action: {
+							pathManager.append(.track(track))
+							Task(priority: .userInitiated) {
+								await playerSession.play(
+									track: track,
+									version: version
+								)
 							}
-					) {
-						TrackListCellView(track: track)
+						}) {
+							TrackListCellView(track: track)
+						}
+						.tint(.primary)
+						.listRowInsets(.init(top: 2, leading: 12, bottom: 2, trailing: 12))
+						.listRowBackground(Color.clear)
 					}
-					.listRowSeparator(.automatic)
-					.listRowInsets(.init())
-					.listRowBackground(Color.clear)
+					.swipeActions {
+						Button(action: {
+							pathManager.append(.track(track))
+						}) {
+							Text("View")
+						}
+						.tint(.primary)
+					}
 				}
 				Spacer()
 					.frame(height: 64)
 					.listRowSeparator(.hidden)
 					.listRowBackground(Color.clear)
 			}
-//			.listStyle(.plain)
-			.listRowSpacing(4)
+			.listStyle(.plain)
 			.navigationBarTitleDisplayMode(.inline)
 			.navigationTitle("Home")
 			.task {
@@ -62,11 +69,5 @@ struct TrackListView: View {
 }
 
 #Preview {
-	DBProvider(.memory) {
-		ClientProvider {
-			PlayerProvider {
-				ContentView()
-			}
-		}
-	}
+	ContentView()
 }

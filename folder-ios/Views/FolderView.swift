@@ -5,8 +5,8 @@
 //  Created by Pat Nakajima on 10/6/23.
 //
 
-import SwiftUI
 import Models
+import SwiftUI
 
 struct FolderView: View {
 	var folder: Folder
@@ -25,7 +25,6 @@ struct FolderView: View {
 
 				Spacer()
 					.frame(height: 64)
-					.listRowSeparator(.hidden)
 					.listRowBackground(Color.clear)
 			}
 			.safeAreaInset(edge: .top) {

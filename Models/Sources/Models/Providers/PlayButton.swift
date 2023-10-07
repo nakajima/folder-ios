@@ -36,46 +36,46 @@ public struct PlayButton: View {
 
 	public var body: some View {
 		ZStack {
-				if version.status == .downloaded {
-					Button(action: {
-						playerSession.toggle(track: track, version: version)
+			if version.status == .downloaded {
+				Button(action: {
+					playerSession.toggle(track: track, version: version)
 
-						Task.detached(priority: .utility) {
-							var track = await track
-							await Log.catch("Error analyzing") {
-								try await track.analyze(database: database!)
-							}
+					Task.detached(priority: .utility) {
+						var track = await track
+						await Log.catch("Error analyzing") {
+							try await track.analyze(database: database!)
+						}
+					}
+				}) {
+					Image(systemName: isPlaying ? pauseIcon : playIcon)
+						.resizable()
+						.scaledToFit()
+						.frame(width: size, height: size)
+				}
+				.buttonStyle(.borderless)
+			} else {
+				if version.status == .downloading {
+					ProgressView()
+						.frame(width: size, height: size)
+				} else {
+					Button(action: {
+						Task(priority: .userInitiated) {
+							let downloader = VersionDownloader(client: apiClient, database: database!, trackVersion: version)
+
+							await downloader.download()
+							await playerSession.play(track: track, version: version)
 						}
 					}) {
-						Image(systemName: isPlaying ? pauseIcon : playIcon)
+						Image(systemName: playIcon)
 							.resizable()
 							.scaledToFit()
 							.frame(width: size, height: size)
+							.opacity(0.5)
 					}
 					.buttonStyle(.borderless)
-				} else {
-					if version.status == .downloading {
-						ProgressView()
-							.frame(width: size, height: size)
-					} else {
-						Button(action: {
-							Task(priority: .userInitiated) {
-								let downloader = VersionDownloader(client: apiClient, database: database!, trackVersion: version)
-
-								await downloader.download()
-								await playerSession.play(track: track, version: version)
-							}
-						}) {
-							Image(systemName: playIcon)
-								.resizable()
-								.scaledToFit()
-								.frame(width: size, height: size)
-								.opacity(0.5)
-						}
-						.buttonStyle(.borderless)
-					}
 				}
-			} 
+			}
+		}
 	}
 
 	var isPlaying: Bool {
