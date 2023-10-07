@@ -30,12 +30,17 @@ struct TrackListView: View {
 					) {
 						TrackListCellView(track: track)
 					}
+					.listRowSeparator(.automatic)
+					.listRowInsets(.init())
+					.listRowBackground(Color.clear)
 				}
 				Spacer()
 					.frame(height: 64)
 					.listRowSeparator(.hidden)
+					.listRowBackground(Color.clear)
 			}
-			.listStyle(.plain)
+//			.listStyle(.plain)
+			.listRowSpacing(4)
 			.navigationBarTitleDisplayMode(.inline)
 			.navigationTitle("Home")
 			.task {

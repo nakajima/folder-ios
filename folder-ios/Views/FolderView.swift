@@ -12,31 +12,36 @@ struct FolderView: View {
 	var folder: Folder
 
 	var body: some View {
-		NavigationStack {
-			FolderTracksProvider(folder: folder) { tracks in
-				List {
-					ForEach(tracks) { track in
-						NavigationLink(destination: TrackShowView(track: track)) {
-							TrackListCellView(track: track)
-						}
+		FolderTracksProvider(folder: folder) { tracks in
+			List {
+				ForEach(tracks) { track in
+					NavigationLink(destination: TrackShowView(track: track)) {
+						TrackListCellView(track: track)
 					}
+					.listRowSeparator(.automatic)
+					.listRowInsets(.init())
+					.listRowBackground(Color.clear)
+				}
 
+				Spacer()
+					.frame(height: 64)
+					.listRowSeparator(.hidden)
+					.listRowBackground(Color.clear)
+			}
+			.safeAreaInset(edge: .top) {
+				HStack {
+					Text(folder.name)
 					Spacer()
-						.frame(height: 64)
-						.listRowSeparator(.hidden)
+					Image(systemName: "folder.fill")
+						.foregroundColor(.secondary)
 				}
-				.listStyle(.plain)
-				.safeAreaInset(edge: .top) {
-					HStack {
-						Text(folder.name)
-						Spacer()
-						Image(systemName: "folder.fill")
-							.foregroundColor(.secondary)
-					}
-					.padding()
-					.font(.title3)
-					.background(.ultraThinMaterial)
-				}
+				.padding()
+				.font(.title3)
+				.background(
+					Rectangle()
+						.fill(.ultraThinMaterial)
+						.shadow(radius: 1)
+				)
 			}
 		}
 	}

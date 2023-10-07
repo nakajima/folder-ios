@@ -13,7 +13,7 @@ struct ContentView: View {
 		DBProvider(.name("Hi.db")) {
 			ClientProvider {
 				PlayerProvider {
-					NavigationStack {
+					NavigationProvider {
 						TrackListView()
 					}
 				}

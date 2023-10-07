@@ -13,6 +13,7 @@ query TrackLoaderQuery {
               id: dbid
               nodeID: id
             	name
+            	orderedTrackIDs
             }
           }
 					versions {

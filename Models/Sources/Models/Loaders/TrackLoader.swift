@@ -86,7 +86,13 @@ public actor TrackLoader {
 						continue
 					}
 
-					let folder = Folder(id: id, nodeID: folderNode.nodeID, name: folderNode.name)
+					let folder = Folder(
+						id: id,
+						nodeID: folderNode.nodeID,
+						name: folderNode.name,
+						orderedTrackIDs: folderNode.orderedTrackIDs.joined(separator: "\t")
+					)
+					
 					try await folder.write(to: database)
 
 					await Folder.assign(track: track, to: folder, in: database)

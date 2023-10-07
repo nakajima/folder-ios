@@ -14,84 +14,68 @@ public struct PlayButton: View {
 	@Environment(\.apiClient) var apiClient
 
 	public var track: Track
-	@State public var version: TrackVersion?
+	public var version: TrackVersion
 
 	public var playIcon = "play.circle"
 	public var pauseIcon = "pause.circle"
 	public var size: CGFloat = 24
 
-	public init(track: Track, version: TrackVersion? = nil, playIcon: String = "play.circle", pauseIcon: String = "pause.circle", size: CGFloat = 24) {
+	public init(
+		track: Track,
+		version: TrackVersion,
+		playIcon: String = "play.circle",
+		pauseIcon: String = "pause.circle",
+		size: CGFloat = 24
+	) {
 		self.track = track
-		self._version = State(wrappedValue: version)
+		self.version = version
 		self.playIcon = playIcon
 		self.pauseIcon = pauseIcon
 		self.size = size
 	}
 
 	public var body: some View {
-		if let version {
-			if version.status == .downloaded {
-				Button(action: {
-					playerSession.toggle(track: track, version: version)
-
-					Task.detached(priority: .utility) {
-						var track = await track
-						await Log.catch("Error analyzing") {
-							try await track.analyze(database: database!)
-						}
-					}
-				}) {
-					Image(systemName: isPlaying ? pauseIcon : playIcon)
-						.resizable()
-						.scaledToFit()
-						.frame(width: size, height: size)
-				}
-				.buttonStyle(.borderless)
-			} else {
-				if version.status == .downloading {
-					ProgressView()
-						.frame(width: size, height: size)
-				} else {
+		ZStack {
+				if version.status == .downloaded {
 					Button(action: {
-						Task(priority: .userInitiated) {
-							let downloader = VersionDownloader(client: apiClient, database: database!, trackVersion: version)
+						playerSession.toggle(track: track, version: version)
 
-							await MainActor.run {
-								self.version?.status = .downloading
+						Task.detached(priority: .utility) {
+							var track = await track
+							await Log.catch("Error analyzing") {
+								try await track.analyze(database: database!)
 							}
-
-							await downloader.download()
-
-							await MainActor.run {
-								self.version?.status = .downloaded
-							}
-
-							await playerSession.play(track: track, version: version)
 						}
 					}) {
-						Image(systemName: playIcon)
+						Image(systemName: isPlaying ? pauseIcon : playIcon)
 							.resizable()
 							.scaledToFit()
 							.frame(width: size, height: size)
-							.opacity(0.5)
 					}
 					.buttonStyle(.borderless)
-				}
-			}
-		} else {
-			ProgressView()
-				.task {
-					guard let database,
-					      let version = try? await TrackVersion.read(
-					      	from: database,
-					      	id: track.currentVersionID
-					      ) else { return }
+				} else {
+					if version.status == .downloading {
+						ProgressView()
+							.frame(width: size, height: size)
+					} else {
+						Button(action: {
+							Task(priority: .userInitiated) {
+								let downloader = VersionDownloader(client: apiClient, database: database!, trackVersion: version)
 
-					await MainActor.run {
-						self.version = version
+								await downloader.download()
+								await playerSession.play(track: track, version: version)
+							}
+						}) {
+							Image(systemName: playIcon)
+								.resizable()
+								.scaledToFit()
+								.frame(width: size, height: size)
+								.opacity(0.5)
+						}
+						.buttonStyle(.borderless)
 					}
 				}
-		}
+			} 
 	}
 
 	var isPlaying: Bool {
@@ -99,7 +83,7 @@ public struct PlayButton: View {
 			return false
 		}
 
-		if nowPlaying.version.nodeID == version?.nodeID {
+		if nowPlaying.version.nodeID == version.nodeID {
 			return nowPlaying.isPlaying
 		} else {
 			return false

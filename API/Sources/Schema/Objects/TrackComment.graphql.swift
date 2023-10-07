@@ -4,8 +4,8 @@
 import ApolloAPI
 
 public extension Objects {
-	static let TrackComment = Object(
-		typename: "TrackComment",
-		implementedInterfaces: [Interfaces.Node.self]
-	)
+  static let TrackComment = Object(
+    typename: "TrackComment",
+    implementedInterfaces: [Interfaces.Node.self]
+  )
 }

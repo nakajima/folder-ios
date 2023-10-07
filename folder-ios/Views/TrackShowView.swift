@@ -13,6 +13,7 @@ struct TrackShowView: View {
 	@Namespace var namespace
 	@Environment(\.blackbirdDatabase) var database
 	@EnvironmentObject var playerSession: PlayerSession
+	@EnvironmentObject var pathManager: PathManager
 
 	@State private var isShowingCover = false
 
@@ -112,22 +113,16 @@ struct TrackShowView: View {
 							}
 
 							ForEach(folders) { folder in
-								SheetButton(buttonLabel: {
-									Text(folder.name)
-										.padding(.horizontal, 8)
-										.padding(.vertical, 4)
-										.font(.caption)
-										.background(.ultraThinMaterial)
-										.cornerRadius(Constants.cornerRadius)
-										.bold()
-								}, sheetContent: {
-									PlayerProvider(session: playerSession) {
-										FolderView(folder: folder)
-											.environmentObject(playerSession)
+								Text(folder.name)
+									.padding(.horizontal, 8)
+									.padding(.vertical, 4)
+									.font(.caption)
+									.background(.ultraThinMaterial)
+									.cornerRadius(Constants.cornerRadius)
+									.bold()
+									.onTapGesture {
+										self.pathManager.append(.folder(folder))
 									}
-								})
-								.tint(.primary)
-								.buttonStyle(.borderless)
 							}
 						}
 						.cornerRadius(Constants.cornerRadius)

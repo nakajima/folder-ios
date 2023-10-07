@@ -102,6 +102,8 @@ public class PlayerSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
 			} else {
 				await play(track: track, version: version)
 			}
+
+			await sync()
 		}
 	}
 
@@ -112,7 +114,7 @@ public class PlayerSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
 	public func play(track: Track, version: TrackVersion) async {
 		await audioPlayerCore.play(url: version.downloadURL, preserveTime: nowPlaying?.track == track)
 
-		if let nowPlaying, nowPlaying.track == track, nowPlaying.version == version {
+		if let nowPlaying, nowPlaying.track == track, nowPlaying.version.id == version.id {
 			return
 		}
 
@@ -148,10 +150,9 @@ public class PlayerSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
 
 		let nowPlaying = newNowPlaying
 
-		refreshNowPlaying()
-
 		await MainActor.run {
 			self.nowPlaying = nowPlaying
+			refreshNowPlaying()
 		}
 	}
 

@@ -4,9 +4,9 @@
 import ApolloAPI
 
 public extension Objects {
-	/// The connection type for Track.
-	static let TrackConnection = Object(
-		typename: "TrackConnection",
-		implementedInterfaces: []
-	)
+  /// The connection type for Track.
+  static let TrackConnection = Object(
+    typename: "TrackConnection",
+    implementedInterfaces: []
+  )
 }

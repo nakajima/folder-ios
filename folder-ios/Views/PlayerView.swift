@@ -17,7 +17,7 @@ struct PlayerView: View {
 	@State private var scrubbingOffset: CGFloat?
 
 	//	var nowPlaying: NowPlaying
-	@EnvironmentObject var playerSession: PlayerSession
+	@ObservedObject var playerSession: PlayerSession
 
 	var body: some View {
 		if let nowPlaying = playerSession.nowPlaying {
@@ -41,6 +41,7 @@ struct PlayerView: View {
 
 					PlayButton(track: nowPlaying.track, version: nowPlaying.version)
 						.foregroundStyle(.primary)
+						.id(nowPlaying.id)
 				}
 
 				if isExpanded {
@@ -125,6 +126,7 @@ struct PlayerView: View {
 								size: 48
 							)
 							.foregroundStyle(.primary)
+							.id(nowPlaying.id)
 
 							Button(action: {
 								playerSession.next()
@@ -144,13 +146,17 @@ struct PlayerView: View {
 					.fontWeight(.light)
 				}
 			}
-			.id("\(nowPlaying.track.id)-\(nowPlaying.version.id)")
 			.font(.subheadline)
 			.frame(maxWidth: .infinity)
 			.padding(.horizontal)
 			.padding(.vertical, 12)
 			.padding(.bottom, dragPadding)
-			.background(.ultraThinMaterial)
+			.background(
+				Rectangle()
+					.fill(.ultraThinMaterial)
+					.shadow(radius: 1)
+					.ignoresSafeArea()
+			)
 			.gesture(DragGesture().updating($dragOffset) { event, state, _ in
 				withAnimation {
 					state = -event.translation.height

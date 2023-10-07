@@ -13,6 +13,7 @@ public struct Folder: BlackbirdModel {
 	@BlackbirdColumn public var id: Int
 	@BlackbirdColumn public var nodeID: String
 	@BlackbirdColumn public var name: String
+	@BlackbirdColumn public var orderedTrackIDs: String
 
 	public static func assign(track: Track, to folder: Folder, in database: Database) async {
 		await Log.catch("Error assigning track to folder") {

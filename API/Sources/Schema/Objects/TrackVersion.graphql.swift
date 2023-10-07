@@ -4,11 +4,11 @@
 import ApolloAPI
 
 public extension Objects {
-	static let TrackVersion = Object(
-		typename: "TrackVersion",
-		implementedInterfaces: [
-			Interfaces.Node.self,
-			Interfaces.Notable.self,
-		]
-	)
+  static let TrackVersion = Object(
+    typename: "TrackVersion",
+    implementedInterfaces: [
+      Interfaces.Node.self,
+      Interfaces.Notable.self
+    ]
+  )
 }

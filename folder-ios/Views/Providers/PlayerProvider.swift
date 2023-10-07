@@ -20,7 +20,7 @@ struct PlayerProvider<Content: View>: View {
 		content()
 			.scrollDismissesKeyboard(.interactively)
 			.safeAreaInset(edge: .bottom) {
-				PlayerView()
+				PlayerView(playerSession: session)
 					.environmentObject(session)
 					.transition(.move(edge: .bottom))
 			}

@@ -4,8 +4,8 @@
 import ApolloAPI
 
 public extension Objects {
-	static let ProjectUpload = Object(
-		typename: "ProjectUpload",
-		implementedInterfaces: [Interfaces.Node.self]
-	)
+  static let ProjectUpload = Object(
+    typename: "ProjectUpload",
+    implementedInterfaces: [Interfaces.Node.self]
+  )
 }

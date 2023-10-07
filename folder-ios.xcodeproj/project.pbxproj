@@ -32,6 +32,7 @@
 		A6DC2F472ACFA9D400CA85EB /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6DC2F462ACFA9D400CA85EB /* PlayerView.swift */; };
 		A6DC2F492ACFAACA00CA85EB /* PlayStateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6DC2F482ACFAACA00CA85EB /* PlayStateProvider.swift */; };
 		A6DC2F4C2AD0A72500CA85EB /* FolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6DC2F4B2AD0A72500CA85EB /* FolderView.swift */; };
+		A6DC2F4E2AD0C49B00CA85EB /* NavigationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6DC2F4D2AD0C49B00CA85EB /* NavigationProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		A6DC2F482ACFAACA00CA85EB /* PlayStateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayStateProvider.swift; sourceTree = "<group>"; };
 		A6DC2F4A2ACFEDB100CA85EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		A6DC2F4B2AD0A72500CA85EB /* FolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderView.swift; sourceTree = "<group>"; };
+		A6DC2F4D2AD0C49B00CA85EB /* NavigationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,6 +240,7 @@
 			children = (
 				A6DC2F482ACFAACA00CA85EB /* PlayStateProvider.swift */,
 				A6B0131A2ACE860700A868A8 /* PlayerProvider.swift */,
+				A6DC2F4D2AD0C49B00CA85EB /* NavigationProvider.swift */,
 			);
 			path = Providers;
 			sourceTree = "<group>";
@@ -380,6 +383,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6DC2F4E2AD0C49B00CA85EB /* NavigationProvider.swift in Sources */,
 				A6DC2F4C2AD0A72500CA85EB /* FolderView.swift in Sources */,
 				A606E4292ACCAB9700D5CC0D /* ContentView.swift in Sources */,
 				A6B013182ACE6F5A00A868A8 /* TrackListCellView.swift in Sources */,
@@ -561,6 +565,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "folder-ios/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = folder.fm;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -600,6 +606,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "folder-ios/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = folder.fm;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
