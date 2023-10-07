@@ -30,7 +30,7 @@ struct TrackListView: View {
 							TrackListCellView(track: track)
 						}
 						.tint(.primary)
-						.listRowInsets(.init(top: 2, leading: 12, bottom: 2, trailing: 12))
+						.listRowInsets(.init(top: 16, leading: 12, bottom: 16, trailing: 12))
 						.listRowBackground(Color.clear)
 					}
 					.swipeActions {
