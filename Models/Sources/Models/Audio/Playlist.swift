@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import GRDB
 
 public protocol Playlist {
-	var database: Database { get }
+	var dbQueue: DatabaseQueue { get }
 
 	func next(current: NowPlaying?) async -> (Track, TrackVersion)?
 	func previous(current: NowPlaying?) async -> (Track, TrackVersion)?
@@ -16,10 +17,10 @@ public protocol Playlist {
 }
 
 public struct AllTracksPlaylist: Playlist {
-	public var database: Database
+	public var dbQueue: DatabaseQueue
 
-	public init(database: Database) {
-		self.database = database
+	public init(dbQueue: DatabaseQueue) {
+		self.dbQueue = dbQueue
 	}
 
 	public func next(current: NowPlaying?) async -> (Models.Track, Models.TrackVersion)? {
@@ -44,11 +45,13 @@ public struct AllTracksPlaylist: Playlist {
 
 	public func list() async -> [(Models.Track, Models.TrackVersion)] {
 		do {
-			let tracks = try await Track.read(from: database, orderBy: .descending(\.$updatedAt))
+			let tracks = try await self.dbQueue.read { db in
+				try Track.order(literal: "updatedAt DESC").fetchAll(db)
+			}
 
-			return try await database.transaction { core in
-				try tracks.compactMap { track in
-					guard let version = try TrackVersion.readIsolated(from: database, core: core, id: track.currentVersionID) else {
+			return try await self.dbQueue.read { db in
+				return try tracks.compactMap { track in
+					guard let version = try TrackVersion.filter(Column("id") == track.currentVersionID).fetchOne(db) else {
 						return nil
 					}
 

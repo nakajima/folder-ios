@@ -7,7 +7,11 @@
 
 import AVFAudio
 import pat_swift
+#if canImport(UIKit)
 import UIKit
+#else
+import AppKit
+#endif
 
 actor AudioPlayerCore {
 	var audioPlayer: AVAudioPlayer?
@@ -16,11 +20,13 @@ actor AudioPlayerCore {
 	init(delegate: PlayerSession) {
 		self.delegate = delegate
 
+		#if canImport(UIKit)
 		Task {
 			await MainActor.run {
 				UIApplication.shared.beginReceivingRemoteControlEvents()
 			}
 		}
+		#endif
 	}
 
 	var isPlaying: Bool {

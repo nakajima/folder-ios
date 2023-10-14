@@ -10,12 +10,21 @@
       }
     },
     {
-      "identity" : "blackbird",
+      "identity" : "grdb.swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/marcoarment/Blackbird",
+      "location" : "https://github.com/groue/GRDB.swift",
+      "state" : {
+        "branch" : "master",
+        "revision" : "d597fd56e9255a29cfa742d8c5e15277dae13ad0"
+      }
+    },
+    {
+      "identity" : "grdbquery",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/groue/GRDBQuery",
       "state" : {
         "branch" : "main",
-        "revision" : "2f15d7fae9f3821b43b7a945af38273fcb955157"
+        "revision" : "79fb10dfbb2f6784ef346ab80c4062ebd02cfbe7"
       }
     },
     {
@@ -42,7 +51,7 @@
       "location" : "https://github.com/nakajima/pat.swift",
       "state" : {
         "branch" : "main",
-        "revision" : "a6761b91d3a8e6e168d69e8be0d291ab99bc8aed"
+        "revision" : "7f7841268374521b42c5421ce9f403c7581e3f18"
       }
     },
     {

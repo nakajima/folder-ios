@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+#if os(iOS)
+typealias NeonColor = UIColor
+typealias NeonPath = UIBezierPath
+#else
+typealias NeonColor = NSColor
+typealias NeonPath = NSBezierPath
+#endif
+
 extension Color {
 	static func randomPastel(seed: Int? = nil) -> Color {
 		var generator = RandomNumberGeneratorWithSeed(seed: seed ?? Int.random(in: 0 ... 256))
@@ -15,7 +23,7 @@ extension Color {
 		let g: CGFloat = (CGFloat.random(in: 0 ... 255, using: &generator) / 256.0) / 2.0 + 0.5
 		let b: CGFloat = (CGFloat.random(in: 0 ... 255, using: &generator) / 256.0) / 2.0 + 0.7
 
-		return Color(UIColor(red: r, green: g, blue: b, alpha: 1.0))
+		return Color(NeonColor(red: r, green: g, blue: b, alpha: 1.0))
 	}
 
 	static func randomBright(seed: Int? = nil) -> Color {
@@ -26,7 +34,7 @@ extension Color {
 		let saturation: CGFloat = (CGFloat.random(in: 0 ... 255, using: &generator) / 255) + 0.5
 		let brightness: CGFloat = (CGFloat.random(in: 0 ... 255, using: &generator) / 255) + 0.8
 
-		return Color(UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: 1))
+		return Color(NeonColor(hue: hue, saturation: saturation, brightness: brightness, alpha: 1))
 	}
 }
 
@@ -121,7 +129,7 @@ struct NeonView: View {
 
 	func makePath(size: CGFloat, seed: Int) -> CGPath {
 		var generator = RandomNumberGeneratorWithSeed(seed: seed)
-		let path = UIBezierPath()
+		let path = NeonPath()
 
 		let numberOfSegments = Int.random(in: 24 ... 32, using: &generator)
 		var x: CGFloat = -(size / CGFloat(numberOfSegments))
@@ -133,10 +141,18 @@ struct NeonView: View {
 			let nextPointOffset = CGFloat.random(in: 0 ... (size / 2), using: &generator)
 			let nextPoint = i.isMultiple(of: 2) ? nextPointOffset : -nextPointOffset
 
+			#if os(iOS)
 			path.addLine(to: .init(x: x, y: (size / 2) + nextPoint))
+			#else
+			path.line(to: .init(x: x, y: (size / 2) + nextPoint))
+			#endif
 		}
 
+		#if os(iOS)
 		return path.copy(roundingCornersToRadius: 10).cgPath
+		#else
+		return path.cgPath
+		#endif
 	}
 }
 

@@ -5,10 +5,9 @@
 //  Created by Pat Nakajima on 10/6/23.
 //
 
-import Blackbird
 import Foundation
 
-public struct Tag: BlackbirdModel {
+public struct Tag: Model {
 	public static let list: [String: String] = [
 		"bass_guitar": "bass guitar",
 		"guitar": "guitar",
@@ -20,13 +19,7 @@ public struct Tag: BlackbirdModel {
 		"piano": "piano",
 	]
 
-	public static var primaryKey: [BlackbirdColumnKeyPath] = [\.$name, \.$trackID]
-
-	public static var indexes: [[BlackbirdColumnKeyPath]] = [
-		[\.$name],
-		[\.$trackID],
-	]
-
-	@BlackbirdColumn public var name: String
-	@BlackbirdColumn public var trackID: Int
+	public var id: Int?
+	public var name: String
+	public var trackID: Int
 }

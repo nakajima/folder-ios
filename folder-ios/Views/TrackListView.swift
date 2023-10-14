@@ -11,31 +11,28 @@ import SwiftUI
 struct TrackListView: View {
 	@EnvironmentObject var playerSession: PlayerSession
 	@EnvironmentObject var pathManager: PathManager
-	@Environment(\.blackbirdDatabase) var database
 
 	var body: some View {
-		TracksProvider { loader, tracks in
+		TracksProvider { loader, tracksWithCurrentVersion in
 			List {
-				ForEach(tracks) { track in
-					TrackVersionProvider(track: track) { version in
-						Button(action: {
-							pathManager.append(.track(track))
-							Task(priority: .userInitiated) {
-								await playerSession.play(
-									track: track,
-									version: version
-								)
-							}
-						}) {
-							TrackListCellView(track: track)
+				ForEach(tracksWithCurrentVersion) { trackWithCurrentVersion in
+					Button(action: {
+						pathManager.append(.track(trackWithCurrentVersion.track))
+						Task(priority: .userInitiated) {
+							await playerSession.play(
+								track: trackWithCurrentVersion.track,
+								version: trackWithCurrentVersion.currentVersion
+							)
 						}
-						.tint(.primary)
-						.listRowInsets(.init(top: 16, leading: 12, bottom: 16, trailing: 12))
-						.listRowBackground(Color.clear)
+					}) {
+						TrackListCellView(trackWithCurrentVersion: trackWithCurrentVersion)
 					}
+					.tint(.primary)
+					.listRowInsets(.init(top: 16, leading: 12, bottom: 16, trailing: 12))
+					.listRowBackground(Color.clear)
 					.swipeActions {
 						Button(action: {
-							pathManager.append(.track(track))
+							pathManager.append(.track(trackWithCurrentVersion.track))
 						}) {
 							Text("View")
 						}
@@ -48,7 +45,9 @@ struct TrackListView: View {
 					.listRowBackground(Color.clear)
 			}
 			.listStyle(.plain)
+			#if os(iOS)
 			.navigationBarTitleDisplayMode(.inline)
+			#endif
 			.navigationTitle("Home")
 			.task {
 				await loader.load()

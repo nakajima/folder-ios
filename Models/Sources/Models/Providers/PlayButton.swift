@@ -10,7 +10,7 @@ import SwiftUI
 
 public struct PlayButton: View {
 	@EnvironmentObject var playerSession: PlayerSession
-	@Environment(\.blackbirdDatabase) var database
+	@Environment(\.dbQueue) var queue
 	@Environment(\.apiClient) var apiClient
 
 	public var track: Track
@@ -43,7 +43,7 @@ public struct PlayButton: View {
 					Task.detached(priority: .utility) {
 						var track = await track
 						await Log.catch("Error analyzing") {
-							try await track.analyze(database: database!)
+							try await track.analyze(queue: queue)
 						}
 					}
 				}) {
@@ -60,7 +60,7 @@ public struct PlayButton: View {
 				} else {
 					Button(action: {
 						Task(priority: .userInitiated) {
-							let downloader = VersionDownloader(client: apiClient, database: database!, trackVersion: version)
+							let downloader = VersionDownloader(client: apiClient, queue: queue, trackVersion: version)
 
 							await downloader.download()
 							await playerSession.play(track: track, version: version)

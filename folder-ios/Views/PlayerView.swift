@@ -44,7 +44,7 @@ struct PlayerView: View {
 
 					PlayButton(track: nowPlaying.track, version: nowPlaying.version)
 						.foregroundStyle(.primary)
-						.id(nowPlaying.id)
+//						.id(nowPlaying.id)
 				}
 
 				if isExpanded {

@@ -6,34 +6,17 @@
 //
 
 import API
-import Blackbird
+import GRDB
 import Foundation
 import pat_swift
 
 public class VersionDownloader: NSObject, ObservableObject, URLSessionDataDelegate {
-	public enum State: Int64, BlackbirdColumnWrappable, BlackbirdStorableAsInteger, Codable {
-		public static func fromValue(_ value: Blackbird.Value) -> State? {
-			switch value {
-			case let .integer(int):
-				return from(unifiedRepresentation: int)
-			default:
-				fatalError("Wrong status")
-			}
-		}
-
-		public func unifiedRepresentation() -> Int64 {
-			rawValue
-		}
-
-		public static func from(unifiedRepresentation: Int64) -> State {
-			State(rawValue: unifiedRepresentation)!
-		}
-
+	public enum State: String, Codable {
 		case unknown, downloading, downloaded
 	}
 
 	var client: ApiClient
-	var database: Database
+	var queue: DatabaseQueue
 	var trackVersion: TrackVersion
 
 	@Published public var status: State = .unknown
@@ -46,9 +29,9 @@ public class VersionDownloader: NSObject, ObservableObject, URLSessionDataDelega
 		try? FileManager.default.createDirectory(at: downloadsURL, withIntermediateDirectories: true)
 	}
 
-	init(client: ApiClient, database: Database, trackVersion: TrackVersion) {
+	init(client: ApiClient, queue: DatabaseQueue, trackVersion: TrackVersion) {
 		self.client = client
-		self.database = database
+		self.queue = queue
 		self.trackVersion = trackVersion
 	}
 
@@ -58,9 +41,11 @@ public class VersionDownloader: NSObject, ObservableObject, URLSessionDataDelega
 
 	public func markDownloaded() async {
 		await Log.catch("Error marking as downloaded") {
-			var trackVersion = self.trackVersion
-			trackVersion.status = .downloaded
-			try await trackVersion.write(to: self.database)
+			try await self.queue.write { db in
+				var trackVersion = self.trackVersion
+				trackVersion.status = .downloaded
+				try trackVersion.save(db)
+			}
 		}
 	}
 
@@ -74,7 +59,7 @@ public class VersionDownloader: NSObject, ObservableObject, URLSessionDataDelega
 
 		await Log.catch("Error downloading") {
 			self.trackVersion.status = .downloading
-			try await self.trackVersion.write(to: self.database)
+			try await self.trackVersion.save(to: self.queue)
 
 			guard let remoteURLString = try await self.client.fetch(GetTrackVersionDownloadURLQuery(dbid: "\(self.trackVersion.id)")).viewer?.trackVersionDownloadURL,
 			      let remoteURL = URL(string: remoteURLString)

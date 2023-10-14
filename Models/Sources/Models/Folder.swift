@@ -5,49 +5,57 @@
 //  Created by Pat Nakajima on 10/6/23.
 //
 
-import Blackbird
+import GRDB
 import Foundation
 import pat_swift
 
-public struct Folder: BlackbirdModel {
-	@BlackbirdColumn public var id: Int
-	@BlackbirdColumn public var nodeID: String
-	@BlackbirdColumn public var name: String
-	@BlackbirdColumn public var orderedTrackIDs: String
+public struct Folder: Model, Equatable {
+	public var id: Int
+	public var nodeID: String
+	public var name: String
+	public var orderedTrackIDs: String
 
-	public static func assign(track: Track, to folder: Folder, in database: Database) async {
+	public static func assign(track: Track, to folder: Folder, in queue: DatabaseQueue) async {
 		await Log.catch("Error assigning track to folder") {
-			try await FolderTrack(trackID: track.id, folderID: folder.id).write(to: database)
+			try await queue.write { db in
+				try FolderTrack(trackID: track.id, folderID: folder.id).insert(db)
+			}
 		}
 	}
 
-	public static func clear(track: Track, in database: Database) async {
+	public static func clear(track: Track, in queue: DatabaseQueue) async {
 		await Log.catch("Error clearing folders") {
-			try await FolderTrack.delete(from: database, matching: \.$trackID == track.id)
+			try await queue.write { db in
+				try FolderTrack.filter(Column("trackID") == track.id).deleteAll(db)
+			}
 		}
 	}
 
-	public static func list(track: Track, in database: Database) async -> [Folder] {
+	public static func list(track: Track, in queue: DatabaseQueue) async -> [Folder] {
 		do {
-			let folders = try await FolderTrack.read(from: database, matching: \.$trackID == track.id)
-			return try await Folder.read(from: database, primaryKeys: folders.map(\.folderID))
+			return try await queue.read { db in
+				let folderTracks = try FolderTrack.filter(Column("trackID") == track.id).fetchAll(db)
+				return try Folder.filter(folderTracks.map(\.folderID).contains(Column("id"))).fetchAll(db)
+			}
 		} catch {
 			return []
 		}
 	}
 
-	public static func list(folder: Folder, in database: Database) async -> [Track] {
+	public static func list(folder: Folder, in queue: DatabaseQueue) async -> [Track] {
 		do {
-			let joins = try await FolderTrack.read(from: database, matching: \.$folderID == folder.id)
-			return try await Track.read(from: database, primaryKeys: joins.map(\.trackID))
+			return try await queue.read { db in
+				let folderTracks = try FolderTrack.filter(Column("folderID") == folder.id).fetchAll(db)
+				return try Track.filter(folderTracks.map(\.trackID).contains(Column("id"))).fetchAll(db)
+			}
 		} catch {
 			return []
 		}
 	}
 }
 
-private struct FolderTrack: BlackbirdModel {
-	@BlackbirdColumn var id = UUID().uuidString
-	@BlackbirdColumn var trackID: Int
-	@BlackbirdColumn var folderID: Int
+struct FolderTrack: Model {
+	var id: Int?
+	var trackID: Int
+	var folderID: Int
 }

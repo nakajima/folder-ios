@@ -11,14 +11,10 @@ import SwiftUI
 
 struct TrackShowView: View {
 	@Namespace var namespace
-	@Environment(\.blackbirdDatabase) var database
 	@EnvironmentObject var playerSession: PlayerSession
 	@EnvironmentObject var pathManager: PathManager
 
 	@State private var isShowingCover = false
-
-	@State var versions = TrackVersion.LiveResults()
-	var versionsUpdater = TrackVersion.ArrayUpdater()
 
 	var track: Track
 
@@ -59,33 +55,38 @@ struct TrackShowView: View {
 					}
 
 					VStack(spacing: 12) {
-						ForEach(versions.results) { version in
-							HStack(spacing: 8) {
-								PlayButton(track: track, version: version)
+						TrackVersionsProvider(track: track) { versions in
+							ForEach(versions) { version in
+								HStack(spacing: 8) {
+									PlayButton(track: track, version: version)
 
-								Text("Version \(version.number)")
-									.bold()
+									Text("Version \(version.number)")
+										.bold()
 
-								if version.isCurrent {
-									Text("Current")
-										.font(.caption2)
-										.padding(.horizontal, 4)
-										.padding(.vertical, 2)
-										.background(.ultraThinMaterial)
-										.cornerRadius(Constants.cornerRadius)
+									if version.isCurrent {
+										Text("Current")
+											.font(.caption2)
+											.padding(.horizontal, 4)
+											.padding(.vertical, 2)
+											.background(.ultraThinMaterial)
+											.cornerRadius(Constants.cornerRadius)
+									}
+
+									Spacer()
+
+									Text("0 comments")
+										.foregroundStyle(.secondary)
 								}
+								.foregroundStyle(version.status == .downloaded ? .primary : .secondary)
+								.listRowSeparator(.hidden)
 
-								Spacer()
-
-								Text("0 comments")
-									.foregroundStyle(.secondary)
-							}
-							.foregroundStyle(version.status == .downloaded ? .primary : .secondary)
-
-							if version.number != 1 {
-								Divider()
+								if version.number != 1 {
+									Divider()
+										.listRowSeparator(.hidden)
+								}
 							}
 						}
+						.listRowSeparator(.hidden)
 					}
 					.font(.subheadline)
 					.frame(maxWidth: .infinity)
@@ -93,11 +94,6 @@ struct TrackShowView: View {
 					.background(.ultraThinMaterial)
 					.cornerRadius(Constants.cornerRadius)
 					.listRowSeparator(.hidden)
-					.onAppear {
-						versionsUpdater.bind(from: database, to: $versions) {
-							try await TrackVersion.read(from: $0, sqlWhere: "trackID = ? ORDER BY number DESC", track.id)
-						}
-					}
 
 					TrackFoldersProvider(track: track) { folders in
 						TagStackView(spacing: 4) {

@@ -7,24 +7,29 @@
 
 import API
 import Foundation
+import GRDB
 import pat_swift
 
 public actor TrackLoader {
-	var database: Models.Database
+	var queue: DatabaseQueue
 	var client: ApiClient
 
-	init(database: Models.Database, client: ApiClient) {
-		self.database = database
+	init(queue: DatabaseQueue, client: ApiClient) {
+		self.queue = queue
 		self.client = client
 	}
 
 	public func downloadLatestVersions() async {
 		await Log.catch("Error downloading latest versions") {
-			for tracks in try await Track.read(from: self.database, orderBy: .descending(\.$updatedAt)).chunked(into: 5) {
+			let tracks = try await self.queue.read { db in
+				try Track.order(literal: "updatedAt DESC").fetchAll(db)
+			}
+
+			for tracks in tracks.chunked(into: 5) {
 				await withTaskGroup(of: Void.self) { group in
 					for track in tracks {
 						group.addTask { [self] in
-							await track.downloadLatestVersion(from: database, with: client)?.download()
+							await track.downloadLatestVersion(from: queue, with: client)?.download()
 						}
 					}
 
@@ -44,7 +49,7 @@ public actor TrackLoader {
 			      let id = Int(node.id) else { continue }
 
 			await Log.catch("Error saving track \(node)") { [self] in
-				var track = try await Track.read(from: database, id: id) ?? Track(
+				var track = try await Track.find(in: self.queue, key: id) ?? Track(
 					id: id,
 					nodeID: node.nodeID,
 					name: node.name,
@@ -56,12 +61,12 @@ public actor TrackLoader {
 				track.updatedAt = node.updatedAt
 				track.shareURL = URL(string: node.shareUrl)!
 
-				try await track.write(to: database)
+				try await track.save(to: self.queue)
 
 				for versionNode in (node.versions.edges ?? []).compactMap({ $0?.node }) {
 					guard let id = Int(versionNode.id) else { continue }
 
-					let version = try await TrackVersion.read(from: database, id: id) ?? TrackVersion(
+					let version = try await TrackVersion.find(in: self.queue, key: id) ?? TrackVersion(
 						id: id,
 						nodeID: versionNode.node_id,
 						duration: versionNode.duration,
@@ -71,15 +76,15 @@ public actor TrackLoader {
 						isCurrent: versionNode.isCurrent
 					)
 
-					try await version.write(to: database)
+					try await version.save(to: self.queue)
 
 					if version.isCurrent {
 						track.currentVersionID = version.id
-						try await track.write(to: database)
+						try await track.save(to: self.queue)
 					}
 				}
 
-				await Folder.clear(track: track, in: database)
+				await Folder.clear(track: track, in: self.queue)
 
 				for folderNode in node.folders.nodes ?? [] {
 					guard let folderNode, let id = Int(folderNode.id) else {
@@ -93,9 +98,9 @@ public actor TrackLoader {
 						orderedTrackIDs: folderNode.orderedTrackIDs.joined(separator: "\t")
 					)
 
-					try await folder.write(to: database)
+					try await folder.save(to: self.queue)
 
-					await Folder.assign(track: track, to: folder, in: database)
+					await Folder.assign(track: track, to: folder, in: self.queue)
 				}
 			}
 		}

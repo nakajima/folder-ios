@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
 	var body: some View {
-		DBProvider(.name("Hi.db")) {
+		DBProvider(.name("folderfm.db")) {
 			ClientProvider {
 				PlayerProvider {
 					NavigationProvider {

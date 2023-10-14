@@ -13,7 +13,7 @@ import SwiftUI
 struct PlayerProvider<Content: View>: View {
 	@State private var pathManager: PathManager = .init()
 	@StateObject var session = PlayerSession()
-	@Environment(\.blackbirdDatabase) var database
+	@Environment(\.dbQueue) var dbQueue
 
 	var content: () -> Content
 
@@ -22,7 +22,7 @@ struct PlayerProvider<Content: View>: View {
 			.scrollDismissesKeyboard(.interactively)
 			.environmentObject(session)
 			.onAppear {
-				session.playlist = AllTracksPlaylist(database: database!)
+				session.playlist = AllTracksPlaylist(dbQueue: dbQueue)
 			}
 			.onPreferenceChange(PathManagerPreferenceKey.self, perform: { value in
 				self.pathManager = value

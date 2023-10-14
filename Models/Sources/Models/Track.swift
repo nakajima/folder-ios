@@ -1,18 +1,18 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
-import Blackbird
+import GRDB
 import Foundation
 import pat_swift
 
-public struct Track: BlackbirdModel, Equatable {
-	@BlackbirdColumn public var id: Int
-	@BlackbirdColumn public var nodeID: String
-	@BlackbirdColumn public var name: String
-	@BlackbirdColumn public var updatedAt: Date
-	@BlackbirdColumn public var shareURL: URL
-	@BlackbirdColumn public var currentVersionID: Int?
-	@BlackbirdColumn public var analyzedAt = Date.distantPast
+public struct Track: Model {
+	public var id: Int
+	public var nodeID: String
+	public var name: String
+	public var updatedAt: Date
+	public var shareURL: URL
+	public var currentVersionID: Int?
+	public var analyzedAt = Date.distantPast
 
 	public init(id: Int, nodeID: String, name: String, updatedAt: Date, shareURL: URL) {
 		self.id = id
@@ -22,37 +22,38 @@ public struct Track: BlackbirdModel, Equatable {
 		self.shareURL = shareURL
 	}
 
-	public func downloadLatestVersion(from db: Database, with client: ApiClient) async -> VersionDownloader? {
-		guard let version = await latestVersion(from: db) else {
+	public func downloadLatestVersion(from queue: DatabaseQueue, with client: ApiClient) async -> VersionDownloader? {
+		guard let version = await latestVersion(from: queue) else {
 			return nil
 		}
 
-		return VersionDownloader(client: client, database: db, trackVersion: version)
+		return VersionDownloader(client: client, queue: queue, trackVersion: version)
 	}
 
-	public func latestVersion(from db: Database) async -> TrackVersion? {
+	public func latestVersion(from queue: DatabaseQueue) async -> TrackVersion? {
 		return await Log.catch("Error getting latest version") {
-			let version = try await TrackVersion.read(from: db, sqlWhere: "trackID = ? AND isCurrent = ?", id, true).first
-			return version
+			return try await queue.read { db in
+				try TrackVersion.filter(Column("trackID") == self.id && Column("isCurrent") == true).fetchOne(db)
+			}
 		}
 	}
 
-	public mutating func analyze(database: Database) async throws {
+	public mutating func analyze(queue: DatabaseQueue) async throws {
 		if analyzedAt > updatedAt {
 			return
 		}
 
-		guard let version = await latestVersion(from: database),
+		guard let version = await latestVersion(from: queue),
 		      version.status == .downloaded
 		else {
 			return
 		}
 
-		try await Analyzer(database: database, track: self, version: version).start()
+		try await Analyzer(database: queue, track: self, version: version).start()
 
 		analyzedAt = Date()
 
-		try await write(to: database)
+		try await save(to: queue)
 	}
 }
 

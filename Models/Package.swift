@@ -7,6 +7,7 @@ let package = Package(
 	name: "Models",
 	platforms: [
 		.iOS(.v17),
+		.macOS(.v12),
 	],
 	products: [
 		// Products define the executables and libraries a package produces, making them visible to other packages.
@@ -17,7 +18,8 @@ let package = Package(
 	],
 	dependencies: [
 		.package(name: "API", path: "../API"),
-		.package(url: "https://github.com/marcoarment/Blackbird", branch: "main"),
+		.package(url: "https://github.com/groue/GRDB.swift", branch: "master"),
+		.package(url: "https://github.com/groue/GRDBQuery", branch: "main"),
 		.package(url: "https://github.com/nakajima/pat.swift", branch: "main"),
 		.package(url: "https://github.com/kishikawakatsumi/KeychainAccess", branch: "master"),
 		.package(url: "https://github.com/apollographql/apollo-ios.git", from: "1.0.0"),
@@ -31,7 +33,8 @@ let package = Package(
 				"API",
 				"KeychainAccess",
 				.product(name: "pat.swift", package: "pat.swift"),
-				.product(name: "Blackbird", package: "Blackbird"),
+				.product(name: "GRDB", package: "GRDB.swift"),
+				"GRDBQuery",
 				.product(name: "Apollo", package: "apollo-ios"),
 			]
 		),

@@ -9,44 +9,38 @@ import Models
 import SwiftUI
 
 struct TrackListCellView: View {
-	var track: Track
+	var trackWithCurrentVersion: TrackWithCurrentVersion
 
 	var body: some View {
 		HStack {
 			ZStack(alignment: .center) {
-				NeonView(size: 36, seed: track.id)
+				NeonView(size: 36, seed: trackWithCurrentVersion.track.id)
 					.cornerRadius(Constants.cornerRadius)
 
-				TrackVersionProvider(track: track) { version in
-					PlayButton(track: track, version: version)
-				}
-				.foregroundStyle(.white)
+				PlayButton(track: trackWithCurrentVersion.track, version: trackWithCurrentVersion.currentVersion)
+					.foregroundStyle(.white)
 			}
 
 			VStack(alignment: .leading) {
 				HStack(alignment: .firstTextBaseline) {
-					Text(track.name)
+					Text(trackWithCurrentVersion.track.name)
 						.font(.subheadline)
 						.bold()
 					Spacer()
 				}
 
 				HStack(spacing: 4) {
-					//					Text(track.duration.formatDuration)
-					//						.font(.caption)
-					TrackVersionProvider(track: track) { version in
-						Group {
-							switch version.status {
-							case .unknown:
-								Text("Unsynced")
-								Image(systemName: "exclamationmark.arrow.triangle.2.circlepath")
-							case .downloading:
-								Text("Syncing…")
-								Image(systemName: "arrow.down.app")
-							case .downloaded:
-								Text("Synced")
-								Image(systemName: "checkmark.circle")
-							}
+					Group {
+						switch trackWithCurrentVersion.currentVersion.status {
+						case .unknown:
+							Text("Unsynced")
+							Image(systemName: "exclamationmark.arrow.triangle.2.circlepath")
+						case .downloading:
+							Text("Syncing…")
+							Image(systemName: "arrow.down.app")
+						case .downloaded:
+							Text("Synced")
+							Image(systemName: "checkmark.circle")
 						}
 					}
 
@@ -56,15 +50,5 @@ struct TrackListCellView: View {
 				.font(.caption)
 			}
 		}
-	}
-}
-
-#Preview {
-	NavigationStack {
-		List {
-			TrackListCellView(track: Track.list[0])
-		}
-		.listStyle(.plain)
-		.navigationTitle("Home")
 	}
 }

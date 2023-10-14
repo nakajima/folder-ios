@@ -6,15 +6,16 @@
 //
 
 import CoreML
+import GRDB
 import Foundation
 import SoundAnalysis
 
 class Analyzer: NSObject, SNResultsObserving {
-	var database: Database
+	var database: DatabaseQueue
 	var track: Track
 	var version: TrackVersion
 
-	init(database: Database, track: Track, version: TrackVersion) {
+	init(database: DatabaseQueue, track: Track, version: TrackVersion) {
 		self.database = database
 		self.track = track
 		self.version = version
@@ -28,8 +29,10 @@ class Analyzer: NSObject, SNResultsObserving {
 		for classification in result.classifications.sorted(by: { $0.confidence > $1.confidence })[0 ..< min(10, result.classifications.count - 1)] {
 			if classification.confidence > 0.6, let tagName = Tag.list[classification.identifier] {
 				Task(priority: .utility) {
-					let tag = Tag(name: tagName, trackID: track.id)
-					try? await tag.write(to: database)
+					try await database.write { db in
+						let tag = Tag(name: tagName, trackID: self.track.id)
+						try tag.insert(db)
+					}
 				}
 			}
 		}

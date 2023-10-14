@@ -5,39 +5,48 @@
 //  Created by Pat Nakajima on 10/5/23.
 //
 
-import Blackbird
+import GRDB
+import GRDBQuery
+import Combine
 import SwiftUI
 
+struct TrackVersionsRequest: Queryable {
+	static var defaultValue: [TrackVersion] = []
+	var track: Track?
+
+	func publisher(in dbQueue: DatabaseQueue) -> AnyPublisher<[TrackVersion], Error> {
+		ValueObservation
+			.tracking { db in
+				try TrackVersion.filter(Column("trackID") == track?.id).order(literal: "number DESC").fetchAll(db)
+			}
+		// The `.immediate` scheduling feeds the view right on subscription,
+		// and avoids an initial rendering with an empty list:
+		.publisher(in: dbQueue, scheduling: .immediate)
+		.eraseToAnyPublisher()
+	}
+}
+
 public struct TrackVersionsProvider<Content: View>: View {
-	var database: Database
 	var track: Track
-	var content: (TrackVersion) -> Content
+	var content: ([TrackVersion]) -> Content
 
-	@State public var versions = TrackVersion.LiveResults()
-	var versionsUpdater = TrackVersion.ArrayUpdater()
+	@Query(TrackVersionsRequest(), in: \.dbQueue) var versions: [TrackVersion]
 
-	public init(database: Database, track: Track, content: @escaping (TrackVersion) -> Content) {
-		self.database = database
+	public init(track: Track, content: @escaping ([TrackVersion]) -> Content) {
 		self.track = track
 		self.content = content
+		self._versions = Query(TrackVersionsRequest(track: track), in: \.dbQueue)
 	}
 
 	public var body: some View {
-		ForEach(versions.results) { result in
-			content(result)
-		}
-		.onAppear {
-			versionsUpdater.bind(from: database, to: $versions) {
-				try await TrackVersion.read(from: $0, sqlWhere: "trackID = ?", track.id)
-			}
-		}
+		content(versions)
 	}
 }
 
 #Preview {
 	DBProvider(.memory) {
 		ClientProvider {
-			TrackVersionsProvider(database: try! Database.inMemoryDatabase(), track: Track.list[0]) { _ in
+			TrackVersionsProvider(track: Track.list[0]) { _ in
 				Text("Hi")
 			}
 		}

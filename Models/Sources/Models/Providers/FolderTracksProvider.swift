@@ -1,41 +1,45 @@
 //
-//  FolderTracksProvider.swift
+//  TrackFoldersProvider.swift
 //
 //
 //  Created by Pat Nakajima on 10/6/23.
 //
 
 import SwiftUI
+import GRDB
+import GRDBQuery
+import Combine
+
+struct FolderTracksRequest: Queryable {
+	static var defaultValue: [TrackWithCurrentVersion] = []
+	var folder: Folder?
+
+	func publisher(in dbQueue: DatabaseQueue) -> AnyPublisher<[TrackWithCurrentVersion], Error> {
+		ValueObservation
+			.tracking { db in
+				return []
+			}
+		// The `.immediate` scheduling feeds the view right on subscription,
+		// and avoids an initial rendering with an empty list:
+		.publisher(in: dbQueue, scheduling: .immediate)
+		.eraseToAnyPublisher()
+	}
+}
+
 
 public struct FolderTracksProvider<Content: View>: View {
-	@Environment(\.blackbirdDatabase) var database
-
 	var folder: Folder
-	var content: ([Track]) -> Content
+	var content: ([TrackWithCurrentVersion]) -> Content
 
-	@State private var tracks = Track.LiveResults()
-	private var tracksUpdater = Track.ArrayUpdater()
+	@Query(FolderTracksRequest(), in: \.dbQueue) var tracks: [TrackWithCurrentVersion]
 
-	public init(folder: Folder, content: @escaping ([Track]) -> Content) {
+	public init(folder: Folder, content: @escaping ([TrackWithCurrentVersion]) -> Content) {
 		self.folder = folder
 		self.content = content
+		self._tracks = Query(FolderTracksRequest(folder: folder), in: \.dbQueue)
 	}
 
 	public var body: some View {
-		content(tracks.results)
-			.onAppear {
-				tracksUpdater.bind(from: database!, to: $tracks) {
-					let tracks = await Folder.list(folder: folder, in: $0)
-
-					return tracks.sorted(by: { t1, t2 in
-						let orderedTrackIDs = folder.orderedTrackIDs.split(separator: "\t").map { String($0) }
-
-						let a = orderedTrackIDs.firstIndex(where: { t in t == t1.nodeID }) ?? 0
-						let b = orderedTrackIDs.firstIndex(where: { t in t == t2.nodeID }) ?? 0
-
-						return a < b
-					})
-				}
-			}
+		content(tracks)
 	}
 }

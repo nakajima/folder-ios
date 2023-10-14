@@ -10,6 +10,7 @@ import Foundation
 import MediaPlayer
 import pat_swift
 import SwiftUI
+import GRDB
 
 public class PlayerSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
 	@Published public var nowPlaying: NowPlaying?
@@ -20,8 +21,10 @@ public class PlayerSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
 
 	override public init() {
 		Log.catch("Error setting up audio session") {
+			#if canImport(UIKit)
 			try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.allowBluetooth, .allowAirPlay])
 			try AVAudioSession.sharedInstance().setActive(true)
+			#endif
 		}
 
 		super.init()
@@ -127,8 +130,8 @@ public class PlayerSession: NSObject, ObservableObject, AVAudioPlayerDelegate {
 		await sync()
 	}
 
-	public func play(version: TrackVersion, from db: Database) async {
-		guard let track = try! await version.track(in: db) else {
+	public func play(version: TrackVersion, from queue: DatabaseQueue) async {
+		guard let track = try? await version.track(in: queue) else {
 			return
 		}
 

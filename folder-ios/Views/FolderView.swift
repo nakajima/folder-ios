@@ -14,9 +14,9 @@ struct FolderView: View {
 	var body: some View {
 		FolderTracksProvider(folder: folder) { tracks in
 			List {
-				ForEach(tracks) { track in
-					NavigationLink(destination: TrackShowView(track: track)) {
-						TrackListCellView(track: track)
+				ForEach(tracks) { trackWithCurrentVersion in
+					NavigationLink(destination: TrackShowView(track: trackWithCurrentVersion.track)) {
+						TrackListCellView(trackWithCurrentVersion: trackWithCurrentVersion)
 					}
 					.listRowSeparator(.automatic)
 					.listRowInsets(.init())
